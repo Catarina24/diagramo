@@ -52,95 +52,95 @@ end</pre>
     <script src="js/server-communication.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/canvas.js"></script>
     <script>
-        var editors = $('.editor');
-        var numberOfEditors = editors.length;
+     var editors = $('.editor');
+     var numberOfEditors = editors.length;
 
-        for (var i = 0; i < editors.length; i++) {
-            var editor = ace.edit(editors[i]);
-            editor.setTheme("ace/theme/clouds");
-            editors[i].style.fontSize = '16px';
-        }
+     for (var i = 0; i < editors.length; i++) {
+         var editor = ace.edit(editors[i]);
+         editor.setTheme("ace/theme/clouds");
+         editors[i].style.fontSize = '16px';
+     }
 
-        var currentEditorNumber = 1;
-        var currentEditorFilename = $(".editor-tab.active").text();
-        var currentEditor = ace.edit(editors[0]);
-        
+     var currentEditorNumber = 1;
+     var currentEditorFilename = $(".editor-tab.active").text();
+     var currentEditor = ace.edit(editors[0]);
+     
 
-        $("#test1").on("click", function() {
-            componentClickHandler('a1', currentEditor);
-        });
+     $("#test1").on("click", function() {
+         componentClickHandler('a1', currentEditor);
+     });
 
-        // on click that will trigger when any .editor-tab chld of #my-editors-tabs is clicked
-        $("#my-editors-tabs").on("click", ".editor-tab", function(event) {
-            if(event.target.dataset.number == null){
-                // pressed + tab
-                addNewTab(numberOfEditors);
-                createNewEditor(editors, numberOfEditors + 1, function(newEditor){
-                    var editor = ace.edit(newEditor);
-                    editor.setTheme("ace/theme/clouds");
-                    newEditor.style.fontSize = '16px';
-                });
-                numberOfEditors++;
-            }
-            else{
-                tabClickHandler(event, function(clickedEditorNumber){
-                    currentEditorNumber = clickedEditorNumber;
-                    currentEditorFilename = $(".editor-tab.active").text();
-                    currentEditor = ace.edit(editors[currentEditorNumber-1]);
-                    console.log(currentEditor.getValue());
-                });
-            }
-        })
+     // on click that will trigger when any .editor-tab chld of #my-editors-tabs is clicked
+     $("#my-editors-tabs").on("click", ".editor-tab", function(event) {
+         if(event.target.dataset.number == null){
+             // pressed + tab
+             addNewTab(numberOfEditors);
+             createNewEditor(editors, numberOfEditors + 1, function(newEditor){
+                 var editor = ace.edit(newEditor);
+                 editor.setTheme("ace/theme/clouds");
+                 newEditor.style.fontSize = '16px';
+             });
+             numberOfEditors++;
+         }
+         else{
+             tabClickHandler(event, function(clickedEditorNumber){
+                 currentEditorNumber = clickedEditorNumber;
+                 currentEditorFilename = $(".editor-tab.active").text();
+                 currentEditor = ace.edit(editors[currentEditorNumber-1]);
+                 console.log(currentEditor.getValue());
+             });
+         }
+     })
 
-        // AJAX: filename, entry (t ou f) e content
+     // AJAX: filename, entry (t ou f) e content
 
-        var timeout;
-        $('#editor-div').keypress(function() {
-            if(timeout) {
-                clearTimeout(timeout);
-                timeout = null;
-            }
+     var timeout;
+     $('#editor-div').keypress(function() {
+         if(timeout) {
+             clearTimeout(timeout);
+             timeout = null;
+         }
 
-            timeout = setTimeout(function() {
+         timeout = setTimeout(function() {
 
-                var files = [];
+             var files = [];
 
-                for(var i = 0; i < editors.length; i++){
-                    var data = {};
-                    data.name = "new" + i + ".dgm";
-                    if(i == 0){
-                        data.entry = true;
-                        data.name = "new.dgm";
-                    }
-                    else{
-                        data.entry = false;
-                        data.name = "new" + (i + 1) + ".dgm";
-                    }
-                    
-                    data.content = ace.edit(editors[i]).getValue();
-                    files.push(data);
-                }
+             for(var i = 0; i < editors.length; i++){
+                 var data = {};
+                 data.name = "new" + i + ".dgm";
+                 if(i == 0){
+                     data.entry = true;
+                     data.name = "new.dgm";
+                 }
+                 else{
+                     data.entry = false;
+                     data.name = "new" + (i + 1) + ".dgm";
+                 }
+                 
+                 data.content = ace.edit(editors[i]).getValue();
+                 files.push(data);
+             }
 
-                var url = "localhost:8080/compile";
-            
-                var request = $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: files,
-                    success: function() {
-                        console.log("Success in request.");
-                    },
-                    error: function(){
-                        console.error("Error in request.");
-                    },
-                    complete: function(){
-                        console.log("Data:");
-                        console.log(files);
-                    }
-                });
-                
-            }, 1000)
-        })
+             var url = "http://localhost:8080/compile";
+
+	     console.log(files)
+	     
+             var request = $.ajax({
+                 type: "post",
+                 url: url,
+                 data: JSON.stringify(files),
+		 dataType: "json",
+		 contentType: "application/json",
+                 success: function(res) {
+		     console.log(res);
+                 },
+                 error: function(err){
+                     console.error(err.status_code);
+                 }
+             });
+             
+         }, 1000)
+     })
     </script>
 </body>
 
