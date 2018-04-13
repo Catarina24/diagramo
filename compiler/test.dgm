@@ -1,0 +1,13 @@
+class actor
+    position: 10, 20
+    image: "path/to/image.png"
+    label: "I am an actor mate"
+    connects: [hello, mate]
+end
+
+object a1 is actor
+    position: 50, 50
+    connects: [m8]
+    image: "hello/world.png"
+    label: "I am so smart"
+end

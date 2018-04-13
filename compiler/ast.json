@@ -1,0 +1,36 @@
+{
+    "classes": [
+        {
+            "connects": [
+                "hello",
+                "mate"
+            ],
+            "image": {
+                "path": "path/to/image.png"
+            },
+            "label": "I am an actor mate",
+            "name": "actor",
+            "position": {
+                "x": 10,
+                "y": 20
+            }
+        }
+    ],
+    "objects": [
+        {
+            "connects": [
+                "m8"
+            ],
+            "image": {
+                "path": "hello/world.png"
+            },
+            "label": "I am so smart",
+            "name": "a1",
+            "parent": "actor",
+            "position": {
+                "x": 50,
+                "y": 50
+            }
+        }
+    ]
+}
