@@ -1,6 +1,5 @@
 import "system.dgm"
-import
-adfasdfokasdf
+
 class actor
     position: 10, 20
     image: "path/to/image.png"
@@ -8,10 +7,51 @@ class actor
     label: "I am an actor mate"
 end
 
+class database
+    position: 10, 20
+    image: "path/to/image.png"
+    connects: [adf]
+    label: "I am an db mate"
+end
+
+class server
+    position: 10, 20
+    image: "path/to/image.png"
+    connects: [adf]
+    label: "I am an server mate"
+end
+
+class machine
+    position: 10, 20
+    image: "path/to/image.png"
+    connects: [adf]
+    label: "I am an machine mate"
+end
+
 object a1 is actor
-    position: 50, 50
-    connects: [m8]
+    position: 100, 100
+    connects: [d1]
     image: "hello/world.png"
     label: "I am so smart"
 end
-asdfjiasod
+
+object d1 is database
+    position: 200, 100
+    connects: []
+    image: "hello/world.png"
+    label: "I am so smart"
+end
+
+object s1 is server
+    position: 200, 200
+    connects: [d1]
+    image: "hello/world.png"
+    label: "I am so smart"
+end
+
+object m1 is machine
+    position: 200, 100
+    connects: [s1]
+    image: "hello/world.png"
+    label: "I am so smart"
+end
