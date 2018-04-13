@@ -1,36 +1,35 @@
 class MyImage {
 
-  constructor (pos, img, label, connections, name) {
-      this.x = pos.x || 0;
-      this.y = pos.y || 0;
-      this.width = 100;
-      this.height = 100;
-      this.img = img;
-      this.label = label || '';
-      this.connections = connections;
-      this.name = name;
-  }
-
-  updatePosition(pos) {
-      this.x = pos.x;
-      this.y = pos.y;
-  }
-
-  draw() {
-    image(this.img, this.x, this.y, this.width, this.height);
-    text(this.label, this.x, this.y + this.height + 15, this.width);
-    textAlign(CENTER);
-  }
-
-  isSame(pos) {
-    if(pos.x > this.x && 
-    pos.x < this.x + this.width && 
-    pos.y > this.y && 
-    pos.y < this.y + this.height) {
-      return true;
+    constructor(pos, img, label, name) {
+        this.x = pos.x || 0;
+        this.y = pos.y || 0;
+        this.width = 100;
+        this.height = 100;
+        this.img = img;
+        this.label = label || '';
+        this.name = name;
     }
-    return false;
-  }
+
+    updatePosition(pos) {
+        this.x = pos.x;
+        this.y = pos.y;
+    }
+
+    draw() {
+        image(this.img, this.x, this.y, this.width, this.height);
+        text(this.label, this.x, this.y + this.height + 15, this.width);
+        textAlign(CENTER);
+    }
+
+    isSame(pos) {
+        if (pos.x > this.x &&
+            pos.x < this.x + this.width &&
+            pos.y > this.y &&
+            pos.y < this.y + this.height) {
+            return true;
+        }
+        return false;
+    }
 }
 
 //alterar
@@ -41,8 +40,11 @@ var dragImageIndex;
 var offset;
 const size = 100;
 
+var connections = [];
+var map = [];
+
 const object = {
-  "classes": [
+    "classes": [
         {
             "connects": [
                 "adf"
@@ -163,135 +165,134 @@ const object = {
             }
         }
     ]
-  };
+};
 
 function parseElementsToDraw() {
-  //funcao
-  object.objects.forEach(obj => {
-      object.classes.forEach(objClass => {
-          if(objClass.name == obj.parent){
-            var img, x, y, label;
+    //funcao
+    object.objects.forEach(obj => {
+        object.classes.forEach(objClass => {
+            if (objClass.name == obj.parent) {
+                var img, x, y, label;
 
-            if(obj.image == null){
-              img = createImg(objClass.image.path);  // Load the image
-            }
-            else{
-              img = createImg(obj.image.path);  // Load the image
-            }
-            img.hide();
-            
-            if(obj.position == null){
-              x = objClass.position.x;
-              y = objClass.position.y;
-            }
-            else{
-              if(obj.position.x == null){
-                x = objClass.position.x;
-              }
-              else{
-                x = obj.position.x;
-              }
-              if(obj.position.y == null){
-                y = objClass.position.y;
-              }
-              else{
-                y = obj.position.y;
-              }
-            }
+                if (obj.image == null) {
+                    img = createImg(objClass.image.path);  // Load the image
+                }
+                else {
+                    img = createImg(obj.image.path);  // Load the image
+                }
+                img.hide();
 
-            if (obj.label == null) {
-                label = objClass.label;
+                if (obj.position == null) {
+                    x = objClass.position.x;
+                    y = objClass.position.y;
+                }
+                else {
+                    if (obj.position.x == null) {
+                        x = objClass.position.x;
+                    }
+                    else {
+                        x = obj.position.x;
+                    }
+                    if (obj.position.y == null) {
+                        y = objClass.position.y;
+                    }
+                    else {
+                        y = obj.position.y;
+                    }
+                }
+
+                if (obj.label == null) {
+                    label = objClass.label;
+                }
+                else {
+                    label = obj.label;
+                }
+
+                //loadedImages.push([x, y, img, label, obj.connects, obj.name]);
+
+                for (let i = 0; i < obj.connects.length; i++) {
+                    connections.push([obj.name, obj.connects[i]]);
+                }
+
+                loadedImages.push([x, y, img, label, obj.name]);
             }
-            else {
-                label = obj.label;
-            }
-            
-            loadedImages.push([x, y, img, label, obj.connects, obj.name]);
-          }
-      });
-  });
+        });
+    });
 }
 
 function setup() {
-  createCanvas(windowWidth/2, windowHeight)
-    .parent('diagrama')
-    .style('display', 'block');
-  parseElementsToDraw();
-  placeImages();
+    createCanvas(windowWidth / 2, windowHeight)
+        .parent('diagrama')
+        .style('display', 'block');
+    parseElementsToDraw();
+    placeImages();
 }
 
 function placeImages() {
 
-  for (let i=0; i < loadedImages.length; i++) {
-    var pos = createVector(loadedImages[i][0], loadedImages[i][1]);
-    images.push(new MyImage(pos, loadedImages[i][2], loadedImages[i][3], loadedImages[i][4], loadedImages[i][5]));
-  }
+    for (let i = 0; i < loadedImages.length; i++) {
+        var pos = createVector(loadedImages[i][0], loadedImages[i][1]);
+        var newImg = new MyImage(pos, loadedImages[i][2], loadedImages[i][3], loadedImages[i][4]);
+
+        map[loadedImages[i][4]] = newImg;
+
+        images.push(newImg);
+    }
 }
 
 function placeConnections() {
 
-  //solucao trolha
-  for (let i=0; i < images.length; i++) {
-    var connections =  images[i]["connections"];
 
-    if (connections != null){
-      for (let j=0; j < connections.length; j++) {
-        for (let k=0; k < images.length; k++) {
-          if (connections[j] == images[k].name) {
+    for (let i = 0; i < connections.length; i++) { 
 
-            const src = images[k];
-            const dest = images[i]; 
+        const src = map[connections[i][0]];
+        const dest = map[connections[i][1]];
 
-            const x = dest.x - src.x;
-            const y = dest.y - src.y;
+        const x = dest.x - src.x;
+        const y = dest.y - src.y;
 
-            if (y >= x && y >= -x) {
-              line(dest.x + dest.width/2, dest.y, src.x + src.width/2, src.y + src.height + 15);
-            }
-            else if (y <= -x && y >= x ) {
-              line(dest.x + dest.width, dest.y + dest.height/2, src.x, src.y + src.height/2);
-            }
-            else if (y <= x && y <= -x) {
-              line(dest.x + dest.width/2, dest.y + dest.height + 15, src.x + src.width/2, src.y);
-            }
-            else if (y >= -x && y <= x){
-              line(dest.x, dest.y + dest.height/2, src.x + src.width, src.y + src.height/2);
-            }
-
-          }
+        if (y >= x && y >= -x) {
+            line(dest.x + dest.width / 2, dest.y, src.x + src.width / 2, src.y + src.height + 15);
         }
-      }
+        else if (y <= -x && y >= x) {
+            line(dest.x + dest.width, dest.y + dest.height / 2, src.x, src.y + src.height / 2);
+        }
+        else if (y <= x && y <= -x) {
+            line(dest.x + dest.width / 2, dest.y + dest.height + 15, src.x + src.width / 2, src.y);
+        }
+        else if (y >= -x && y <= x) {
+            line(dest.x, dest.y + dest.height / 2, src.x + src.width, src.y + src.height / 2);
+        }
     }
-  }
 }
 
 function draw() {
-  clear();
-  for (let i=0; i < images.length; i++) {
-    images[i].draw();
-  }
-  placeConnections();
+    clear();
+    for (let i = 0; i < images.length; i++) {
+        images[i].draw();
+    }
+    placeConnections();
 }
 
 function mousePressed() {
-  var m = createVector(mouseX, mouseY);
+    var m = createVector(mouseX, mouseY);
 
-  for (var i=0; i<images.length; i++) {
-    if (images[i].isSame(m)) {
-        isDragging = true;
-        dragImageIndex = i;
-        offset = createVector(mouseX - images[i].x, mouseY - images[i].y);
+    for (var i = 0; i < images.length; i++) {
+        if (images[i].isSame(m)) {
+            isDragging = true;
+            dragImageIndex = i;
+            offset = createVector(mouseX - images[i].x, mouseY - images[i].y);
+        }
     }
-  }
 }
 
 function mouseDragged() {
-  if (isDragging) {
-    var newPos = createVector(mouseX - offset.x, mouseY - offset.y);
-    images[dragImageIndex].updatePosition(newPos);
-  }
+    if (isDragging) {
+        var newPos = createVector(mouseX - offset.x, mouseY - offset.y);
+        images[dragImageIndex].updatePosition(newPos);
+    }
 }
 
 function mouseReleased() {
-  isDragging = false;
+    isDragging = false;
 }
