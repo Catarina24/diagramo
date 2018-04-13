@@ -1,18 +1,6 @@
 {
     "classes": [
         {
-            "connects": [],
-            "image": {
-                "path": ""
-            },
-            "label": "",
-            "name": "",
-            "position": {
-                "x": 0,
-                "y": 0
-            }
-        },
-        {
             "connects": [
                 "adf"
             ],
@@ -29,34 +17,10 @@
         {
             "connects": [],
             "image": {
-                "path": ""
-            },
-            "label": "",
-            "name": "",
-            "position": {
-                "x": 0,
-                "y": 0
-            }
-        },
-        {
-            "connects": [],
-            "image": {
                 "path": "image/of/a/database.png"
             },
             "label": "Database",
             "name": "system",
-            "position": {
-                "x": 0,
-                "y": 0
-            }
-        },
-        {
-            "connects": [],
-            "image": {
-                "path": ""
-            },
-            "label": "",
-            "name": "",
             "position": {
                 "x": 0,
                 "y": 0
