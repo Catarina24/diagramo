@@ -1,10 +1,10 @@
 class MyImage {
 
-  constructor (pos, width, height, img, label, connections, name) {
+  constructor (pos, img, label, connections, name) {
       this.x = pos.x || 0;
       this.y = pos.y || 0;
-      this.width = width || 100;
-      this.height = height || 100;
+      this.width = 100;
+      this.height = 100;
       this.img = img;
       this.label = label || '';
       this.connections = connections;
@@ -170,7 +170,8 @@ function parseElementsToDraw() {
   object.objects.forEach(obj => {
       object.classes.forEach(objClass => {
           if(objClass.name == obj.parent){
-            var img;
+            var img, x, y, label;
+
             if(obj.image == null){
               img = createImg(objClass.image.path);  // Load the image
             }
@@ -178,8 +179,7 @@ function parseElementsToDraw() {
               img = createImg(obj.image.path);  // Load the image
             }
             img.hide();
-            var x;
-            var y;
+            
             if(obj.position == null){
               x = objClass.position.x;
               y = objClass.position.y;
@@ -198,15 +198,15 @@ function parseElementsToDraw() {
                 y = obj.position.y;
               }
             }
-            loadedImages.push([x, y, img]);
 
-              if (obj.label == null) {
-                loadedImages.push([objClass.position.x, objClass.position.y, img, objClass.label, obj.connects, obj.name]);  
-              }
-              else if (obj.label != null) {
-                loadedImages.push([objClass.position.x, objClass.position.y, img, obj.label, obj.connects, obj.name]);
-              }
-              else {}
+            if (obj.label == null) {
+                label = objClass.label;
+            }
+            else {
+                label = obj.label;
+            }
+            
+            loadedImages.push([x, y, img, label, obj.connects, obj.name]);
           }
       });
   });
@@ -224,7 +224,7 @@ function placeImages() {
 
   for (let i=0; i < loadedImages.length; i++) {
     var pos = createVector(loadedImages[i][0], loadedImages[i][1]);
-    images.push(new MyImage(pos, loadedImages[i][2].width, loadedImages[i][2].height, loadedImages[i][2], loadedImages[i][3], loadedImages[i][4], loadedImages[i][5]));
+    images.push(new MyImage(pos, loadedImages[i][2], loadedImages[i][3], loadedImages[i][4], loadedImages[i][5]));
   }
 }
 
@@ -238,22 +238,6 @@ function placeConnections() {
       for (let j=0; j < connections.length; j++) {
         for (let k=0; k < images.length; k++) {
           if (connections[j] == images[k].name) {
-            //line(images[i].x + images[i].width/2, images[i].y + images[i].height/2, images[k].x + + images[k].width/2, images[k].y + images[k].height/2);
-            /*if (images[i].x > images[k].x) {
-              line(images[i].x, images[i].y + images[i].height/2, images[k].x + images[k].width, images[k].y + images[k].height/2);
-            }
-            else {
-              line(images[i].x + images[i].width, images[i].y + images[i].height/2, images[k].x, images[k].y + images[k].height/2);
-            }
-            if(images[i].x >= images[k].x-15 && images[i].y <= images[k].x+15){
-              if(images[i].y >= images[k].y){
-                line(images[i].x + images[i].width/2, images[i].y + images[i].height, images[k].x + images[k].width/2, images[k].y);
-              }
-              else{
-                line(images[i].x + images[i].width/2, images[i].y, images[k].x + images[k].width/2, images[k].y + images[k].height);                
-              }
-            }*/
-
 
             const src = images[k];
             const dest = images[i]; 
@@ -262,13 +246,13 @@ function placeConnections() {
             const y = dest.y - src.y;
 
             if (y >= x && y >= -x) {
-              line(dest.x + dest.width/2, dest.y, src.x + src.width/2, src.y + src.height);
+              line(dest.x + dest.width/2, dest.y, src.x + src.width/2, src.y + src.height + 15);
             }
             else if (y <= -x && y >= x ) {
               line(dest.x + dest.width, dest.y + dest.height/2, src.x, src.y + src.height/2);
             }
             else if (y <= x && y <= -x) {
-              line(dest.x + dest.width/2, dest.y + dest.height, src.x + src.width/2, src.y);
+              line(dest.x + dest.width/2, dest.y + dest.height + 15, src.x + src.width/2, src.y);
             }
             else if (y >= -x && y <= x){
               line(dest.x, dest.y + dest.height/2, src.x + src.width, src.y + src.height/2);
