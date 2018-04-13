@@ -32,16 +32,17 @@ class MyImage {
     }
 }
 
-//alterar
-var loadedImages = [];
-var isDraggable = false;
+//images
 var images = [];
+
+//to update draw
+var isDraggable = false;
 var dragImageIndex;
 var offset;
-const size = 100;
 
+//connections
 var connections = [];
-var map = [];
+var mapNamesToImgs = [];
 
 const object = {
     "classes": [
@@ -208,45 +209,35 @@ function parseElementsToDraw() {
                     label = obj.label;
                 }
 
-                //loadedImages.push([x, y, img, label, obj.connects, obj.name]);
-
                 for (let i = 0; i < obj.connects.length; i++) {
                     connections.push([obj.name, obj.connects[i]]);
                 }
 
-                loadedImages.push([x, y, img, label, obj.name]);
+                createMyImage(x, y, img, label, obj.name);
             }
         });
     });
 }
 
+function createMyImage(x, y, img, label, name) {
+    var pos = createVector(x, y);
+    var newImg = new MyImage(pos, img, label, name);
+    mapNamesToImgs[name] = newImg;
+    images.push(newImg);
+}
+
 function setup() {
     createCanvas(windowWidth / 2, windowHeight)
-        .parent('diagrama')
-        .style('display', 'block');
+        .parent('diagrama');
     parseElementsToDraw();
-    placeImages();
 }
 
-function placeImages() {
+function drawConnections() {
 
-    for (let i = 0; i < loadedImages.length; i++) {
-        var pos = createVector(loadedImages[i][0], loadedImages[i][1]);
-        var newImg = new MyImage(pos, loadedImages[i][2], loadedImages[i][3], loadedImages[i][4]);
+    for (let i = 0; i < connections.length; i++) {
 
-        map[loadedImages[i][4]] = newImg;
-
-        images.push(newImg);
-    }
-}
-
-function placeConnections() {
-
-
-    for (let i = 0; i < connections.length; i++) { 
-
-        const src = map[connections[i][0]];
-        const dest = map[connections[i][1]];
+        const src = mapNamesToImgs[connections[i][0]];
+        const dest = mapNamesToImgs[connections[i][1]];
 
         const x = dest.x - src.x;
         const y = dest.y - src.y;
@@ -271,7 +262,7 @@ function draw() {
     for (let i = 0; i < images.length; i++) {
         images[i].draw();
     }
-    placeConnections();
+    drawConnections();
 }
 
 function mousePressed() {
