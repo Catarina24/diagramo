@@ -48,20 +48,47 @@ class Lexer:
     stream_cursor = 0
     last_char = ' '
 
-    def __init__(self, filepath):
-        file = open(filepath, "r")
-        self.stream = file.read()
+    char_no = 1
+    line_no = 0
+    file_no = 0
+    files = []
 
+    def __init__(self, filepath):
+        self.stream = ""
+        self.add_file(filepath)
+
+    def add_file(self, filepath):
+        file = open(filepath, "r")
+        content = file.read() + "\n"
+        start = len(self.stream)
+        end = start + len(content)
+        self.files.append((filepath, end))
+        self.stream += content
+        
     def append_to_stream(self, content):
         self.stream += "\n" + content
 
     def get_char(self):
         if self.stream_cursor < len(self.stream):
+            # oh my...
+            if self.stream_cursor > self.files[self.file_no][1]:
+                self.file_no += 1
+                self.line_no = 0
+                self.char_no = 1
             char = self.stream[self.stream_cursor]
+            if char == "\n":
+                self.line_no += 1
+                self.char_no = 1
+            else:
+                self.char_no += 1
+            # ...god
             self.stream_cursor += 1
             return char
         else:
             return None
+
+    def get_file(self):
+        return self.files[self.file_no][0]
 
     def is_white_space(self, char):
         if char == None: return False
@@ -149,6 +176,7 @@ class Lexer:
         return Token(ord(this_char))
 
 # abstract syntax tree
+
 class LabelAstNode:
     def __init__(self, text):
         self.text = text
@@ -182,7 +210,12 @@ class ClassAstNode:
         self.name = name
 
     def json(self):
-        return dict(name=self.name, label=self.label.text, position=self.position.json(), image=self.image.json(), connects=self.connects.connections)
+        d = dict(name=self.name)
+        if hasattr(self, "label") and self.label != None: d["label"] = self.label.text
+        if hasattr(self, "position") and self.position != None: d["position"] = self.position.json()
+        if hasattr(self, "image") and self.image != None: d["image"] = self.image.json()
+        if hasattr(self, "connects") and self.connects != None: d["connects"] = self.connects.connections
+        return d
 
 class ObjectAstNode:
     def __init__(self, parent, name):
@@ -191,10 +224,10 @@ class ObjectAstNode:
 
     def json(self):
         d = dict(name=self.name, parent=self.parent)
-        if hasattr(self, "label"): d["label"] = self.label.text
-        if hasattr(self, "position"): d["position"] = self.position.json()
-        if hasattr(self, "image"): d["image"] = self.image.json()
-        if hasattr(self, "connects"): d["connects"] = self.connects.connections
+        if hasattr(self, "label") and self.label != None: d["label"] = self.label.text
+        if hasattr(self, "position") and self.position != None: d["position"] = self.position.json()
+        if hasattr(self, "image") and self.image != None: d["image"] = self.image.json()
+        if hasattr(self, "connects") and self.connects != None: d["connects"] = self.connects.connections
         return d
 
 class RootAstNode:
@@ -217,10 +250,19 @@ class RootAstNode:
 # parser
 class Parser:
     cur_token = None
+    errors = []
     
     def __init__(self, filepath):
         self.lexer = Lexer(filepath)
         self.cur_token = self.lexer.get_token()
+
+    def error(self, message):
+        self.errors.append("{} line {}: Syntax error - {}".format(self.lexer.get_file(), self.lexer.line_no, message))
+
+    def skip_until_top_level(self):
+        while self.cur_token.tag != Tag.OBJECT and self.cur_token.tag != Tag.CLASS:
+            if self.cur_token.tag == Tag.EOF: return None # dont get stuck here if the error is at the EOF
+            self.cur_token = self.lexer.get_token()
 
     def parse_program(self):
         # merge the imported files
@@ -241,9 +283,10 @@ class Parser:
             self.cur_token = self.lexer.get_token()
             if self.cur_token.tag == Tag.STRING:
                 filepath = self.cur_token.string
-                file = open(filepath, "r")
-                self.lexer.append_to_stream(file.read())
+                self.lexer.add_file(filepath)
                 self.cur_token = self.lexer.get_token()
+            else:
+                self.error("expected a module name")
 
     def parse_top_level(self):
         if self.cur_token.tag == Tag.CLASS:
@@ -252,7 +295,11 @@ class Parser:
         if self.cur_token.tag == Tag.OBJECT:
             self.cur_token = self.lexer.get_token()
             return self.parse_object()
-        return None
+        if self.cur_token.tag == Tag.EOF:
+            return None
+        self.error("expected a top level expression")
+        self.skip_until_top_level()
+        return ClassAstNode("");
 
     def parse_class(self):
         if self.cur_token.tag == Tag.ID:
@@ -323,6 +370,10 @@ class Parser:
             self.cur_token = self.lexer.get_token()
             if self.cur_token.tag == Tag.STRING:
                 return LabelAstNode(self.cur_token.string)
+            else:
+                self.error("expected string")
+        else:
+            self.error("expected ':'")
         return None
 
     def parse_position(self):
@@ -336,6 +387,14 @@ class Parser:
                     if self.cur_token.tag == Tag.NUM:
                         y = self.cur_token.value
                         return PositionAstNode(x, y)
+                    else:
+                        self.error("expected a number")
+                else:
+                    self.error("expected a ','")
+            else:
+                self.error("expected a number")
+        else:
+            self.error("expected a ':'")
         return None
 
     def parse_image(self):
@@ -343,6 +402,10 @@ class Parser:
             self.cur_token = self.lexer.get_token()
             if self.cur_token.tag == Tag.STRING:
                 return ImageAstNode(self.cur_token.string)
+            else:
+                self.error("expected a string")
+        else:
+            self.error("expected a ':'")
         return None
 
     def parse_connects(self):
@@ -351,18 +414,25 @@ class Parser:
             if self.cur_token.tag == ord("["):
                 connections = []
                 self.cur_token = self.lexer.get_token()
-                while self.cur_token.tag != ord("]"):
+                while self.cur_token.tag != ord("]") and self.cur_token.tag != Tag.END:
                     if len(connections) != 0:
                         if self.cur_token.tag == ord(","):
                             self.cur_token = self.lexer.get_token()
                             if self.cur_token.tag == Tag.ID:
                                 connections.append(self.cur_token.lexeme)
                                 self.cur_token = self.lexer.get_token()
+                            else:
+                                self.error("expected an identifier")
+                        else:
+                            self.cur_token = self.lexer.get_token()
                     else:
                         if self.cur_token.tag == Tag.ID:
                             connections.append(self.cur_token.lexeme)
                             self.cur_token = self.lexer.get_token()
-                        
+                        else:
+                            self.error("expected an identifier")
+                if self.cur_token.tag == Tag.END:
+                    self.error("expected a ']'")
                 return ConnectsAstNode(connections)
         return None
                         
@@ -370,4 +440,6 @@ class Parser:
 p = Parser(args["input"])
 r = p.parse_program()
 r.export(args["output"])
+for error in p.errors:
+    print(error)
 

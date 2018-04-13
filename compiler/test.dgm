@@ -1,10 +1,11 @@
 import "system.dgm"
-
+import
+adfasdfokasdf
 class actor
     position: 10, 20
     image: "path/to/image.png"
+    connects: [adf]
     label: "I am an actor mate"
-    connects: [hello, mate]
 end
 
 object a1 is actor
@@ -13,3 +14,4 @@ object a1 is actor
     image: "hello/world.png"
     label: "I am so smart"
 end
+asdfjiasod
