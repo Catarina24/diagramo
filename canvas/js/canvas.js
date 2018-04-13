@@ -36,7 +36,7 @@ class MyImage {
 var images = [];
 
 //to update draw
-var isDraggable = false;
+var isDragging = false;
 var dragImageIndex;
 var offset;
 
@@ -84,8 +84,8 @@ const object = {
             "label": "I am an server mate",
             "name": "server",
             "position": {
-                "x": 10,
-                "y": 20
+                "x": 150,
+                "y": 250
             }
         },
         {
@@ -98,8 +98,8 @@ const object = {
             "label": "I am an machine mate",
             "name": "machine",
             "position": {
-                "x": 10,
-                "y": 20
+                "x": 40,
+                "y": 40
             }
         },
         {
@@ -262,7 +262,17 @@ function draw() {
     for (let i = 0; i < images.length; i++) {
         images[i].draw();
     }
+    updateCursor();
     drawConnections();
+}
+
+function updateCursor() {
+    if (isDragging) {
+        cursor(MOVE);
+    }
+    else {
+        cursor(ARROW);
+    }
 }
 
 function mousePressed() {
