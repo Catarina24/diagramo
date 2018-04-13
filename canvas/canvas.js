@@ -1,12 +1,14 @@
 class MyImage {
 
-  constructor (pos, width, height, img, label) {
+  constructor (pos, width, height, img, label, connections, name) {
       this.x = pos.x || 0;
       this.y = pos.y || 0;
       this.width = width || 100;
       this.height = height || 100;
       this.img = img;
       this.label = label || '';
+      this.connections = connections;
+      this.name = name;
   }
 
   updatePosition(pos) {
@@ -58,7 +60,8 @@ const object = {
   "objects" : [
       {
           "name" : "d1",
-          "parent" : "database"
+          "parent" : "database", 
+          "connects" : ["a1"]
       },
       {
           "name" : "a1",
@@ -76,10 +79,10 @@ function parseElementsToDraw() {
               img.hide();
 
               if (obj.label == null) {
-                loadedImages.push([objClass.position.x, objClass.position.y, img, objClass.label]);  
+                loadedImages.push([objClass.position.x, objClass.position.y, img, objClass.label, obj.connects, obj.name]);  
               }
               else if (obj.label != null) {
-                loadedImages.push([objClass.position.x, objClass.position.y, img, obj.label]);
+                loadedImages.push([objClass.position.x, objClass.position.y, img, obj.label, obj.connects, obj.name]);
               }
               else {}
           }
@@ -91,16 +94,38 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   parseElementsToDraw();
   placeImages();
+  //placeConnections();
 }
 
 function placeImages() {
 
   for (let i=0; i < loadedImages.length; i++) {
     var pos = createVector(loadedImages[i][0], loadedImages[i][1]);
-    images.push(new MyImage(pos, loadedImages[i][2].width, loadedImages[i][2].height, loadedImages[i][2], loadedImages[i][3]));
+    images.push(new MyImage(pos, loadedImages[i][2].width, loadedImages[i][2].height, loadedImages[i][2], loadedImages[i][3], loadedImages[i][4], loadedImages[i][5]));
   }
-
+  console.log("vamos la ver");
   console.log(images);
+}
+
+function placeConnections() {
+
+  //solucao trolha
+  for (let i=0; i < images.length; i++) {
+    var connections =  images[i]["connections"];
+
+    if (connections != null){
+      for (let j=0; j < connections.length; j++) {
+        console.log(connections[j]);
+        for (let k=0; k < images.length; k++) {
+          console.log(images[k].name);
+          if (connections[j] == images[k].name) {
+            console.log("asdasd");
+            line(images[i].x + images[i].width/2, images[i].y + images[i].height/2, images[k].x + + images[k].width/2, images[k].y + images[k].height/2);
+          }
+        }
+      }
+    }
+  }
 }
 
 function draw() {
@@ -108,6 +133,7 @@ function draw() {
   for (let i=0; i < images.length; i++) {
     images[i].draw();
   }
+  placeConnections();
 }
 
 function mousePressed() {
