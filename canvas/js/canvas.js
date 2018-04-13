@@ -213,10 +213,11 @@ function parseElementsToDraw() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth/2, windowHeight)
+    .parent('diagrama')
+    .style('display', 'block');
   parseElementsToDraw();
   placeImages();
-  //placeConnections();
 }
 
 function placeImages() {
@@ -225,8 +226,6 @@ function placeImages() {
     var pos = createVector(loadedImages[i][0], loadedImages[i][1]);
     images.push(new MyImage(pos, loadedImages[i][2].width, loadedImages[i][2].height, loadedImages[i][2], loadedImages[i][3], loadedImages[i][4], loadedImages[i][5]));
   }
-  console.log("vamos la ver");
-  console.log(images);
 }
 
 function placeConnections() {
@@ -237,11 +236,8 @@ function placeConnections() {
 
     if (connections != null){
       for (let j=0; j < connections.length; j++) {
-        console.log(connections[j]);
         for (let k=0; k < images.length; k++) {
-          console.log(images[k].name);
           if (connections[j] == images[k].name) {
-            console.log("asdasd");
             //line(images[i].x + images[i].width/2, images[i].y + images[i].height/2, images[k].x + + images[k].width/2, images[k].y + images[k].height/2);
             if (images[i].x > images[k].x) {
               line(images[i].x, images[i].y + images[i].height/2, images[k].x + images[k].width, images[k].y + images[k].height/2);

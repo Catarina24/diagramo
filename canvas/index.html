@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Diagramo</title>
+    <meta name="description" content="The coding diagram creator">
+    <meta name="author" content="break.">
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <script src="js/libraries/jquery.js" type="text/javascript"></script>
+    <script src="js/libraries/ace/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/addons/p5.dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/addons/p5.sound.min.js"></script>
+</head>
+
+<body>
+    <div class="flex-container min-height-screen-height">
+        <div class="flex-div min-height-parent-height" id="my-editors">
+            <div id="my-editors-tabs">
+                <button class="editor-tab active" data-number="1">new.dgm</button><button class="editor-tab" id="add-new-tab-button">+</button>
+            </div>
+            <div class="relative min-height-parent-height" id="editor-div">
+                <pre class="editor tab-content" id="editor-1">
+class actor
+    position: 10, 20
+    image: "path/to/image.png"
+    label: "Actor"
+    connects: []
+end
+
+object a1 is actor
+    position: 50, 50
+end</pre>
+            </div>
+
+        </div>
+        <div class="flex-div" id="diagrama">
+            <h1>Diagrama</h1>
+        </div>
+    </div>
+
+
+    <script src="js/diagram-to-code.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/editor-tabs.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/server-communication.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/canvas.js"></script>
+    <script>
+        var editors = $('.editor');
+        var numberOfEditors = editors.length;
+
+        for (var i = 0; i < editors.length; i++) {
+            var editor = ace.edit(editors[i]);
+            editor.setTheme("ace/theme/clouds");
+            editors[i].style.fontSize = '16px';
+        }
+
+        var currentEditorNumber = 1;
+        var currentEditorFilename = $(".editor-tab.active").text();
+        var currentEditor = ace.edit(editors[0]);
+        
+
+        $("#test1").on("click", function() {
+            componentClickHandler('a1', currentEditor);
+        });
+
+        // on click that will trigger when any .editor-tab chld of #my-editors-tabs is clicked
+        $("#my-editors-tabs").on("click", ".editor-tab", function(event) {
+            if(event.target.dataset.number == null){
+                // pressed + tab
+                addNewTab(numberOfEditors);
+                createNewEditor(editors, numberOfEditors + 1, function(newEditor){
+                    var editor = ace.edit(newEditor);
+                    editor.setTheme("ace/theme/clouds");
+                    newEditor.style.fontSize = '16px';
+                });
+                numberOfEditors++;
+            }
+            else{
+                tabClickHandler(event, function(clickedEditorNumber){
+                    currentEditorNumber = clickedEditorNumber;
+                    currentEditorFilename = $(".editor-tab.active").text();
+                    currentEditor = ace.edit(editors[currentEditorNumber-1]);
+                    console.log(currentEditor.getValue());
+                });
+            }
+        })
+
+        // AJAX: filename, entry (t ou f) e content
+
+        var timeout;
+        $('#editor-div').keypress(function() {
+            if(timeout) {
+                clearTimeout(timeout);
+                timeout = null;
+            }
+
+            timeout = setTimeout(function() {
+
+                var files = [];
+
+                for(var i = 0; i < editors.length; i++){
+                    var data = {};
+                    data.name = "new" + i + ".dgm";
+                    if(i == 0){
+                        data.entry = true;
+                        data.name = "new.dgm";
+                    }
+                    else{
+                        data.entry = false;
+                        data.name = "new" + (i + 1) + ".dgm";
+                    }
+                    
+                    data.content = ace.edit(editors[i]).getValue();
+                    files.push(data);
+                }
+
+                var url = "localhost:8080/compile";
+            
+                var request = $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: files,
+                    success: function() {
+                        console.log("Success in request.");
+                    },
+                    error: function(){
+                        console.error("Error in request.");
+                    },
+                    complete: function(){
+                        console.log("Data:");
+                        console.log(files);
+                    }
+                });
+                
+            }, 1000)
+        })
+    </script>
+</body>
+
+</html>

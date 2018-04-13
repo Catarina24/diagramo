@@ -1,0 +1,71 @@
+#my-editors .editor {
+    margin: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.flex-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.min-height-screen-height{
+    min-height: 100vh;
+}
+
+.min-height-parent-height{
+    min-height: 100%;
+}
+
+.flex-div{
+    flex: 1 1;
+}
+
+.relative{
+    position: relative;
+}
+
+/* Style the tab */
+#my-editors-tabs {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Change background color of buttons on hover */
+.editor-tab:hover {
+    background-color: #ddd;
+}
+
+/* Style the buttons inside the tab */
+.editor-tab {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+#editor-1{
+    display: inline-block;
+}
+
+/* Create an active/current tablink class */
+.editor-tab.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tab-content {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
