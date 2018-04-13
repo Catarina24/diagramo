@@ -1,5 +1,6 @@
-from parser import Parser
+import json
 
+from parser import Parser
 from bottle import hook, route, request, response, post, run
 
 _allow_origin = '*'
@@ -21,7 +22,14 @@ def options_handler(path = None):
 
 @post('/compile')
 def compile():
-    print(request.json)
-    return { "mate": "hello, world" }
+    files = request.json
+    for file in files:
+        if file.get("entry"):
+            entry = file.get("name")
+    p = Parser(entry, files)
+    root = p.parse_program(files)
+    if len(p.errors) > 0:
+        return json.dumps(p.errors)
+    return json.dumps(root.json())
 
 run()

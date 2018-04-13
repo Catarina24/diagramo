@@ -47,13 +47,22 @@ class Lexer:
     file_no = 0
     files = []
 
-    def __init__(self, filepath):
+    def __init__(self, filepath, content=None):
         self.stream = ""
-        self.add_file(filepath)
+        self.stream_cursor = 0
+        self.last_char = ' '
 
-    def add_file(self, filepath):
-        file = open(filepath, "r")
-        content = file.read() + "\n"
+        self.char_no = 1
+        self.line_no = 0
+        self.file_no = 0
+        self.files = []
+        
+        self.add_file(filepath, content)
+
+    def add_file(self, filepath, content=None):
+        if content == None:
+            file = open(filepath, "r")
+            content = file.read() + "\n"
         start = len(self.stream)
         end = start + len(content)
         self.files.append((filepath, end))
@@ -228,6 +237,10 @@ class RootAstNode:
     classes = []
     objects = []
 
+    def __init__(self):
+        self.classes = []
+        self.objects = []
+
     def json(self):
         classes_json = []
         for class_node in self.classes:
@@ -246,8 +259,15 @@ class Parser:
     cur_token = None
     errors = []
     
-    def __init__(self, filepath):
-        self.lexer = Lexer(filepath)
+    def __init__(self, filepath, files=None):
+        self.cur_token = None
+        self.errors = []
+        
+        if files != None:
+            for file in files:
+                if file.get("name") == filepath:
+                    content = file.get("content")
+        self.lexer = Lexer(filepath, content)
         self.cur_token = self.lexer.get_token()
 
     def error(self, message):
@@ -258,9 +278,9 @@ class Parser:
             if self.cur_token.tag == Tag.EOF: return None # dont get stuck here if the error is at the EOF
             self.cur_token = self.lexer.get_token()
 
-    def parse_program(self):
+    def parse_program(self, files=None):
         # merge the imported files
-        self.parse_imports()
+        self.parse_imports(files)
         # start the actual parsing
         root_node = RootAstNode()
         child_node = self.parse_top_level()
@@ -272,12 +292,16 @@ class Parser:
             child_node = self.parse_top_level()
         return root_node
 
-    def parse_imports(self):
+    def parse_imports(self, files):
         while(self.cur_token.tag == Tag.IMPORT):
             self.cur_token = self.lexer.get_token()
             if self.cur_token.tag == Tag.STRING:
                 filepath = self.cur_token.string
-                self.lexer.add_file(filepath)
+                if files != None:
+                    for file in files:
+                        if file.name == filepath:
+                            content = file.content
+                self.lexer.add_file(filepath, content)
                 self.cur_token = self.lexer.get_token()
             else:
                 self.error("expected a module name")
