@@ -237,18 +237,44 @@ function placeConnections() {
 
     if (connections != null){
       for (let j=0; j < connections.length; j++) {
-        console.log(connections[j]);
         for (let k=0; k < images.length; k++) {
-          console.log(images[k].name);
           if (connections[j] == images[k].name) {
-            console.log("asdasd");
             //line(images[i].x + images[i].width/2, images[i].y + images[i].height/2, images[k].x + + images[k].width/2, images[k].y + images[k].height/2);
-            if (images[i].x > images[k].x) {
+            /*if (images[i].x > images[k].x) {
               line(images[i].x, images[i].y + images[i].height/2, images[k].x + images[k].width, images[k].y + images[k].height/2);
             }
             else {
               line(images[i].x + images[i].width, images[i].y + images[i].height/2, images[k].x, images[k].y + images[k].height/2);
             }
+            if(images[i].x >= images[k].x-15 && images[i].y <= images[k].x+15){
+              if(images[i].y >= images[k].y){
+                line(images[i].x + images[i].width/2, images[i].y + images[i].height, images[k].x + images[k].width/2, images[k].y);
+              }
+              else{
+                line(images[i].x + images[i].width/2, images[i].y, images[k].x + images[k].width/2, images[k].y + images[k].height);                
+              }
+            }*/
+
+
+            const src = images[k];
+            const dest = images[i]; 
+
+            const x = dest.x - src.x;
+            const y = dest.y - src.y;
+
+            if (y >= x && y >= -x) {
+              line(dest.x + dest.width/2, dest.y, src.x + src.width/2, src.y + src.height);
+            }
+            else if (y <= -x && y >= x ) {
+              line(dest.x + dest.width, dest.y + dest.height/2, src.x, src.y + src.height/2);
+            }
+            else if (y <= x && y <= -x) {
+              line(dest.x + dest.width/2, dest.y + dest.height, src.x + src.width/2, src.y);
+            }
+            else if (y >= -x && y <= x){
+              line(dest.x, dest.y + dest.height/2, src.x + src.width, src.y + src.height/2);
+            }
+
           }
         }
       }
