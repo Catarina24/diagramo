@@ -242,7 +242,13 @@ function placeConnections() {
           console.log(images[k].name);
           if (connections[j] == images[k].name) {
             console.log("asdasd");
-            line(images[i].x + images[i].width/2, images[i].y + images[i].height/2, images[k].x + + images[k].width/2, images[k].y + images[k].height/2);
+            //line(images[i].x + images[i].width/2, images[i].y + images[i].height/2, images[k].x + + images[k].width/2, images[k].y + images[k].height/2);
+            if (images[i].x > images[k].x) {
+              line(images[i].x, images[i].y + images[i].height/2, images[k].x + images[k].width, images[k].y + images[k].height/2);
+            }
+            else {
+              line(images[i].x + images[i].width, images[i].y + images[i].height/2, images[k].x, images[k].y + images[k].height/2);
+            }
           }
         }
       }
