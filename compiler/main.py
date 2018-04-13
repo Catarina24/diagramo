@@ -20,7 +20,8 @@ class Tag(IntEnum):
     NUM = -9,
     POSITION = -10,
     CONNECTTO = -11,
-    EOF = -12
+    EOF = -12,
+    IMPORT = -13
 
 # tokens    
 class Token:
@@ -50,6 +51,9 @@ class Lexer:
     def __init__(self, filepath):
         file = open(filepath, "r")
         self.stream = file.read()
+
+    def append_to_stream(self, content):
+        self.stream += "\n" + content
 
     def get_char(self):
         if self.stream_cursor < len(self.stream):
@@ -118,6 +122,8 @@ class Lexer:
                 return Token(Tag.POSITION)
             elif str == "connects":
                 return Token(Tag.CONNECTTO)
+            elif str == "import":
+                return Token(Tag.IMPORT)
 
             # identifiers
             return Identifier(str)
@@ -217,6 +223,9 @@ class Parser:
         self.cur_token = self.lexer.get_token()
 
     def parse_program(self):
+        # merge the imported files
+        self.parse_imports()
+        # start the actual parsing
         root_node = RootAstNode()
         child_node = self.parse_top_level()
         while child_node != None:
@@ -226,6 +235,15 @@ class Parser:
                 root_node.objects.append(child_node)
             child_node = self.parse_top_level()
         return root_node
+
+    def parse_imports(self):
+        while(self.cur_token.tag == Tag.IMPORT):
+            self.cur_token = self.lexer.get_token()
+            if self.cur_token.tag == Tag.STRING:
+                filepath = self.cur_token.string
+                file = open(filepath, "r")
+                self.lexer.append_to_stream(file.read())
+                self.cur_token = self.lexer.get_token()
 
     def parse_top_level(self):
         if self.cur_token.tag == Tag.CLASS:

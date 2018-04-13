@@ -1,0 +1,5 @@
+class system
+    image: "image/of/a/database.png"
+    label: "Database"
+    position: 0, 0
+end
