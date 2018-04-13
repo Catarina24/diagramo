@@ -1,11 +1,12 @@
 class MyImage {
 
-  constructor (pos, width, height, img) {
+  constructor (pos, width, height, img, label) {
       this.x = pos.x || 0;
       this.y = pos.y || 0;
       this.width = width || 100;
       this.height = height || 100;
       this.img = img;
+      this.label = label || '';
   }
 
   updatePosition(pos) {
@@ -14,8 +15,9 @@ class MyImage {
   }
 
   draw() {
-    //image(this.img, this.x, this.y, this.width, this.height);
     image(this.img, this.x, this.y, this.width, this.height);
+    text(this.label, this.x, this.y + this.height + 15, this.width);
+    textAlign(CENTER);
   }
 
   isSame(pos) {
@@ -65,24 +67,29 @@ const object = {
   ]
 }
 
-function preload() {
+function parseElementsToDraw() {
   //funcao
   object.objects.forEach(obj => {
       object.classes.forEach(objClass => {
           if(objClass.name == obj.parent){
               var img = createImg(objClass.image);  // Load the image
               img.hide();
-              loadedImages.push([objClass.position.x, objClass.position.y, img]);
+
+              if (obj.label == null) {
+                loadedImages.push([objClass.position.x, objClass.position.y, img, objClass.label]);  
+              }
+              else if (obj.label != null) {
+                loadedImages.push([objClass.position.x, objClass.position.y, img, obj.label]);
+              }
+              else {}
           }
       });
   });
 }
 
 function setup() {
-  console.log("fds");
   createCanvas(windowWidth, windowHeight);
-  background(100);
-  //parseElementsToDraw();
+  parseElementsToDraw();
   placeImages();
 }
 
@@ -90,7 +97,7 @@ function placeImages() {
 
   for (let i=0; i < loadedImages.length; i++) {
     var pos = createVector(loadedImages[i][0], loadedImages[i][1]);
-    images.push(new MyImage(pos, loadedImages[i][2].width, loadedImages[i][2].height, loadedImages[i][2]));
+    images.push(new MyImage(pos, loadedImages[i][2].width, loadedImages[i][2].height, loadedImages[i][2], loadedImages[i][3]));
   }
 
   console.log(images);
