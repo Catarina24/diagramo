@@ -1,6 +1,5 @@
 import "system.dgm"
-import
-adfasdfokasdf
+
 class actor
     position: 10, 20
     image: "path/to/image.png"
@@ -14,4 +13,3 @@ object a1 is actor
     image: "hello/world.png"
     label: "I am so smart"
 end
-asdfjiasod
