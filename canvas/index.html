@@ -85,16 +85,14 @@ end</pre>
          componentClickHandler('a1', currentEditor);
      });
 
-     $('#image-upload-form input[type=submit]').click(function (event) {
+     $('#image-upload-form').on("submit", function (event) {
             event.preventDefault();
 
-            var data = new FormData($("#image-upload-form"));
-            data.append('files', ($("#image-upload-form input[type=file]")[0].files));
 
             $.ajax({
                 url: 'http://localhost:8080/actions/upload-image.php',
                 type: 'POST',
-                data: data,
+                data: new FormData(this),
                 contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
                 processData: false, // NEEDED, DON'T OMIT THIS
                 success: function (msg) {
