@@ -94,8 +94,10 @@ function parseElementsToDraw(object) {
                 }
 
                 if (obj.position == null) {
-                    x = objClass.position.x;
-                    y = objClass.position.y;
+		    if (objClass.position != null) {
+			x = objClass.position.x ;
+			y = objClass.position.y;
+		    }
                 }
                 else {
                     if (obj.position.x == null) {
