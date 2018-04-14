@@ -293,6 +293,7 @@ class Parser:
         self.cur_token = None
         self.errors = []
         self.files = files
+        self.ids = []
 
         content = None
         if files != None:
@@ -355,7 +356,12 @@ class Parser:
 
     def parse_class(self):
         if self.cur_token.tag == Tag.ID:
-            class_node = ClassAstNode(self.cur_token.lexeme)
+            id = self.cur_token.lexeme
+            class_node = ClassAstNode(id)
+            if id in self.ids:
+                self.error("Duplicate id '" + id + "'")
+            else:
+                self.ids.append(id)
             self.cur_token = self.lexer.get_token()
             while self.cur_token.tag != Tag.END:
                 
@@ -393,6 +399,10 @@ class Parser:
     def parse_object(self):
         if self.cur_token.tag == Tag.ID:
             name = self.cur_token.lexeme
+            if name in self.ids:
+                self.error("Duplicate id '" + name + "'")
+            else:
+                self.ids.append(name)
             self.cur_token = self.lexer.get_token()
             if self.cur_token.tag == Tag.IS:
                 self.cur_token = self.lexer.get_token()
