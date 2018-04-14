@@ -130,6 +130,7 @@ end</pre>
 		 dataType: "json",
 		 contentType: "application/json",
                  success: function(res) {
+                    parseElementsToDraw(res);
 		     console.log(res);
                  },
                  error: function(err){

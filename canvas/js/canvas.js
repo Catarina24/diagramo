@@ -33,18 +33,25 @@ class MyImage {
 }
 
 //images
-var images = [];
+var images;
 
 //to update draw
-var isDragging = false;
+var isDragging;
 var dragImageIndex;
 var offset;
 
 //connections
-var connections = [];
-var mapNamesToImgs = [];
+var connections;
+var mapNamesToImgs;
 
-const object = {
+function reset() {
+    images = [];
+    isDragging = false;
+    connections = [];
+    mapNamesToImgs = [];
+}
+
+/*const object = {
     "classes": [
         {
             "connects": [
@@ -166,9 +173,10 @@ const object = {
             }
         }
     ]
-};
+};*/
 
-function parseElementsToDraw() {
+function parseElementsToDraw(object) {
+    reset();
     //funcao
     object.objects.forEach(obj => {
         object.classes.forEach(objClass => {
@@ -209,8 +217,10 @@ function parseElementsToDraw() {
                     label = obj.label;
                 }
 
-                for (let i = 0; i < obj.connects.length; i++) {
-                    connections.push([obj.name, obj.connects[i]]);
+                if (obj.connects != null) {
+                    for (let i = 0; i < obj.connects.length; i++) {
+                        connections.push([obj.name, obj.connects[i]]);
+                    }
                 }
 
                 createMyImage(x, y, img, label, obj.name);
@@ -227,9 +237,10 @@ function createMyImage(x, y, img, label, name) {
 }
 
 function setup() {
+    reset();
     createCanvas(windowWidth / 2, windowHeight)
         .parent('diagrama');
-    parseElementsToDraw();
+    //parseElementsToDraw(object);
 }
 
 function drawConnections() {
