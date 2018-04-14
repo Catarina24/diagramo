@@ -262,7 +262,8 @@ class Parser:
     def __init__(self, filepath, files=None):
         self.cur_token = None
         self.errors = []
-        
+
+        content = None
         if files != None:
             for file in files:
                 if file.get("name") == filepath:
@@ -297,6 +298,7 @@ class Parser:
             self.cur_token = self.lexer.get_token()
             if self.cur_token.tag == Tag.STRING:
                 filepath = self.cur_token.string
+                content = None
                 if files != None:
                     for file in files:
                         if file.name == filepath:
