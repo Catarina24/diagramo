@@ -2,31 +2,25 @@
 header('Access-Control-Allow-Origin: *');
 
 $message = "";
+$target_dir = "../static/projects/";
 
-$target_dir = "../";
+if (!file_exists($target_dir)) {
+    mkdir($target_dir, 0777, true);
+}
 
-$file = $_FILES["pic"];
+$file = $_FILES["folder"];
 $target_file = $target_dir . basename($file["name"]);
 $uploadOk = 1;
 $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-// Check if image file is a actual image or fake image
-if(isset($_POST["submit"])) {
-    $check = getimagesize($file["tmp_name"]);
-    if($check !== false) {
-        $message .= "File is an image - " . $check["mime"] . ".";
-        $uploadOk = 1;
-    } else {
-        echo "File is not an image.";
-        $uploadOk .= 0;
-    }
-}
+
+
 // Check if file already exists
 if (file_exists($target_file)) {
     $message .= "Sorry, file already exists.";
     $uploadOk = 0;
 }
 // Check file size
-if ($file["size"] > 500000) {
+if ($file["size"] > 5000000) {
     $message .= "Sorry, your file is too large.";
     $uploadOk = 0;
 }
@@ -52,3 +46,5 @@ else{
 }
 
 echo json_encode(array("status" => $status, "message" => $message));
+
+?>
