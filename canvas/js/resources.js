@@ -4,7 +4,7 @@ function updateResourcesList (resourcesDiv, _callback) {
     var imagesDirectory = "static/images/";
 
     $.ajax({
-        url: 'http://localhost:8080/actions/get-list-of-images.php',
+        url: '/actions/get-list-of-images.php',
         type: 'POST',
         data: new FormData(this),
         contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
