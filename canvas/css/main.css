@@ -5,7 +5,12 @@ html, body {
     height: 100%;
     margin: 0;
     overflow: hidden;
-  }
+}
+
+ul {
+    list-style-type: circle;
+    list-style-position: inside;
+}
 
 .min-height-screen-height{
     min-height: 100vh;
@@ -204,6 +209,12 @@ canvas {
 
 #diagrama {
     overflow: hidden;
+}
+
+/* EDITOR HELPER */
+
+#resources {
+    columns: 3;
 }
 
 #download {
