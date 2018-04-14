@@ -13,6 +13,20 @@ class MyImage {
     updatePosition(pos) {
         this.x = pos.x;
         this.y = pos.y;
+
+        if (this.x < 0) {
+            this.x = 0;
+        }
+        if (this.x + this.width > windowWidth/2) {
+            this.x = windowWidth / 2 - this.width;
+        }
+        if (this.y < 0) {
+            this.y = 0;
+        }
+        if (this.y + this.height > windowHeight) {
+            //wtf this magic number
+            this.y = windowHeight - this.height - 12;
+        }
     }
 
     draw() {
@@ -116,6 +130,7 @@ function setup() {
     reset();
     createCanvas(windowWidth / 2, windowHeight)
         .parent('diagrama');
+    noStroke();
     //parseElementsToDraw(object);
 }
 
@@ -183,4 +198,8 @@ function mouseDragged() {
 
 function mouseReleased() {
     isDragging = false;
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth/2, windowHeight);
 }
