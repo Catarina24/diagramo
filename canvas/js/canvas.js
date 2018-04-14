@@ -32,6 +32,7 @@ class MyImage {
     }
 
     draw() {
+        noStroke();
         image(this.img, this.x, this.y, this.width, this.height);
         text(this.label, this.x, this.y + this.height + 15, this.width);
         textAlign(CENTER);
@@ -152,8 +153,8 @@ function drawConnections() {
         const src = mapNamesToImgs[connections[i][0]];
         const dest = mapNamesToImgs[connections[i][1]];
 
-        const x = dest.x - src.x;
-        const y = dest.y - src.y;
+        const x = (dest.x + dest.width/2) - (src.x + src.width/2);
+        const y = (dest.y + dest.height/2) - (src.y + src.height/2);
 
         let notDraggedImage;
         let imageDragged;
@@ -175,15 +176,23 @@ function drawConnections() {
             }
         }
         if (y >= x && y >= -x) {
+            stroke(111, 107, 142); 
+            strokeWeight(3);
             line(dest.x + dest.width / 2, dest.y, src.x + src.width / 2, src.y + src.height + 15);
         }
         else if (y <= -x && y >= x) {
+            stroke(111, 107, 142);
+            strokeWeight(3); 
             line(dest.x + dest.width, dest.y + dest.height / 2, src.x, src.y + src.height / 2);
         }
         else if (y <= x && y <= -x) {
+            stroke(111, 107, 142);
+            strokeWeight(3);
             line(dest.x + dest.width / 2, dest.y + dest.height + 15, src.x + src.width / 2, src.y);
         }
         else if (y >= -x && y <= x) {
+            stroke(111, 107, 142);
+            strokeWeight(3);
             line(dest.x, dest.y + dest.height / 2, src.x + src.width, src.y + src.height / 2);
         }
     }
