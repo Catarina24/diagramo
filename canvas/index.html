@@ -41,7 +41,9 @@ end</pre>
             </div>
 
         </div>
-        <div class="flex-div" id="diagrama"></div>
+        <div class="flex-div" id="diagrama">
+            <button style="float: right">Export</button>
+        </div>
     </div>
 
 
@@ -75,7 +77,8 @@ end</pre>
              addNewTab(numberOfEditors);
              createNewEditor(editors, numberOfEditors + 1, function(newEditor){
                  var editor = ace.edit(newEditor);
-                 editor.setTheme("ace/theme/clouds");
+                 editor.setTheme("ace/theme/solarized_dark");
+                 editor.session.setMode("ace/mode/lua");
                  newEditor.style.fontSize = '16px';
              });
              numberOfEditors++;
