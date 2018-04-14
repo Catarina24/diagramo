@@ -47,7 +47,7 @@ end</pre>
                 </div>
             </div>
             <div id="my-console">
-                <form action="http://localhost:8080/actions/upload-image.php">
+                <form id="image-upload-form">
                     <input type="file" name="pic" accept="image/*">
                     <input type="submit">
                 </form>
@@ -85,16 +85,37 @@ end</pre>
          componentClickHandler('a1', currentEditor);
      });
 
+     $('#image-upload-form input[type=submit]').click(function (event) {
+            event.preventDefault();
+
+            var data = new FormData($("#image-upload-form"));
+            data.append('files', ($("#image-upload-form input[type=file]")[0].files));
+
+            $.ajax({
+                url: 'http://localhost:8080/actions/upload-image.php',
+                type: 'POST',
+                data: data,
+                contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
+                processData: false, // NEEDED, DON'T OMIT THIS
+                success: function (msg) {
+                    console.log(msg);
+                },
+                complete: function(){
+                    console.log("I came all the way here.");
+                }
+            });
+        });
+
      // on click that will trigger when any .editor-tab chld of #my-editors-tabs is clicked
      $("#my-editors-tabs").on("click", ".editor-tab", function(event) {
          if(event.target.id == "add-new-tab-button"){
              // pressed + tab
              addNewTab(numberOfEditors);
              createNewEditor(editors, numberOfEditors + 1, function(newEditor){
-                 var editor = ace.edit(newEditor);
-		 editor.setTheme("ace/theme/dawn");
-                 editor.session.setMode("ace/mode/my-mode");
-                 newEditor.style.fontSize = '16px';
+                var editor = ace.edit(newEditor);
+                editor.setTheme("ace/theme/dawn");
+                editor.session.setMode("ace/mode/my-mode");
+                newEditor.style.fontSize = '16px';
              });
              numberOfEditors++;
          }
@@ -154,8 +175,8 @@ end</pre>
                  type: "post",
                  url: url,
                  data: JSON.stringify(files),
-		 dataType: "json",
-		 contentType: "application/json",
+                dataType: "json",
+                contentType: "application/json",
                  success: function(res) {
 		     if (res.errors != undefined && res.errors.length > 0) {
 			 console.log(res)
