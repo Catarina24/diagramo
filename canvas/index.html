@@ -57,7 +57,9 @@ end</pre>
 
      for (var i = 0; i < editors.length; i++) {
          var editor = ace.edit(editors[i]);
-         editor.setTheme("ace/theme/clouds");
+         //dawn, eclipse, github, iplastic
+         editor.setTheme("ace/theme/github");
+         editor.session.setMode("ace/mode/lua");
          editors[i].style.fontSize = '16px';
      }
 
@@ -77,7 +79,7 @@ end</pre>
              addNewTab(numberOfEditors);
              createNewEditor(editors, numberOfEditors + 1, function(newEditor){
                  var editor = ace.edit(newEditor);
-                 editor.setTheme("ace/theme/solarized_dark");
+                 editor.setTheme("ace/theme/pastel_on_dark");
                  editor.session.setMode("ace/mode/lua");
                  newEditor.style.fontSize = '16px';
              });
