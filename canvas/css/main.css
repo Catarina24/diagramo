@@ -102,6 +102,10 @@ html, body {
     color: black;
 }
 
+.tab-name:hover {
+    cursor: text
+}
+
  /* Style the tab */
  .tab {
     overflow: hidden;
@@ -207,14 +211,9 @@ canvas {
     right: 0; 
     bottom: 0; 
     margin-bottom: 15px; 
-    margin-right: 15px; 
-    height: 45px; 
-    width: 45px;
-}
-
-#download:hover {
-    background-color: lightblue;
-    box-shadow: inset 0 -2px 0 #738de9;
+    margin-right: 15px;
+    padding: 0;
+    line-height: 26px;
 }
 
 #import-export div{
@@ -223,3 +222,4 @@ canvas {
     align-items: center;
     justify-content: center;
 }
+
