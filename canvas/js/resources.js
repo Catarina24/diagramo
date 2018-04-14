@@ -1,7 +1,6 @@
 function updateResourcesList (resourcesDiv, _callback) {
     
     var listOfResources = document.createElement("ul");
-    var imagesDirectory = "static/images/";
 
     $.ajax({
         url: '/actions/get-list-of-images.php',
@@ -26,8 +25,9 @@ function updateResourcesList (resourcesDiv, _callback) {
 
                 var item = document.createElement("li");
                 var anchor = document.createElement("a");
-                anchor.href = imagesDirectory + resource;
+                anchor.href = resource;
                 anchor.text = resource;
+		anchor.target = "_blank";
 
                 item.appendChild(anchor);
                 listOfResources.appendChild(item);

@@ -3,7 +3,7 @@ header('Access-Control-Allow-Origin: *');
 
 $message = "";
 
-$target_dir = "../static/images/";
+$target_dir = "../";
 $file = $_FILES["pic"];
 $target_file = $target_dir . basename($file["name"]);
 $uploadOk = 1;
