@@ -31,6 +31,7 @@
             overflow: auto;
         }
     </style>
+
 </head>
 
 <body>
@@ -54,6 +55,22 @@ object a1 is actor
 end</pre>
                 </div>
             </div>
+            <div>
+                <div class="tab">
+                <button class="tablinks" onclick="openCity(event, 'London')" style="width: 50px; line-height: 16px; font-size: 12px">Console</button>
+                <button class="tablinks" onclick="openCity(event, 'Paris')" style="width: 50px; line-height: 16px; font-size: 12px">Resources</button>
+                </div>
+                
+                <div id="London" class="tabcontent">
+                <h3>London</h3>
+                <p>London is the capital city of England.</p>
+                </div>
+                
+                <div id="Paris" class="tabcontent">
+                <h3>Paris</h3>
+                <p>Paris is the capital of France.</p> 
+                </div>
+            </div>
             <div id="my-console">
                 <form action="http://localhost:8080/actions/upload-image.php">
                     <input type="file" name="pic" accept="image/*">
@@ -71,6 +88,23 @@ end</pre>
     <script src="js/editor-tabs.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/server-communication.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/canvas.js"></script>
+
+    <script>
+        function openCity(evt, cityName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+
     <script>
      var editors = $('.editor');
      var numberOfEditors = editors.length;
