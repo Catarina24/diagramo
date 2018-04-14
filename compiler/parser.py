@@ -66,13 +66,13 @@ class Lexer:
         if content == None:
             try:
                 file = open(filepath, "r")
-                content = file.read() + "\n"
+                content = file.read()
             except FileNotFoundError:
                 return False
         start = len(self.stream)
+        self.stream += "\n" + content
         end = start + len(content)
         self.files.append((filepath, end))
-        self.stream += content
         return True
         
     def append_to_stream(self, content):
