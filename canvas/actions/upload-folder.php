@@ -37,14 +37,27 @@ if ($uploadOk == 0) {
 }
 
 $status = "";
+$done = "";
 
 if($uploadOk){
     $status = "OK";
+    
+    $zip = new ZipArchive;
+    $res = $zip->open($target_file);
+
+    if ($res === TRUE) {
+        if (!file_exists("../static/zip")) {
+            mkdir("../static/zip", 0777, true);
+        }
+        $zip->extractTo("../static/zip");
+        $zip->close();
+    }
 }
 else{
     $status = "ERROR";
 }
 
-echo json_encode(array("status" => $status, "message" => $message));
+
+echo json_encode(array("status" => $status, "message" => $message, "filename" => basename( $file["name"])));
 
 ?>

@@ -38,8 +38,18 @@ $('#folder-upload-form').on("submit", function (event) {
         data: new FormData(this),
         contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
         processData: false, // NEEDED, DON'T OMIT THIS
-        success: function (msg) {
+        success: function (msgJson) {
+            msg = JSON.parse(msgJson);
             console.log(msg);
+            if (msg.status == "OK") {
+                
+                //call function 
+
+
+            }
+        },
+        error: function (error) {
+            console.log(error);
         }
-    });
+    })
 });
