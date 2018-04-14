@@ -82,7 +82,7 @@ html, body {
 .editor-tab.active {
     background-color: #ccc;
     box-shadow: inset 0 -2px 0 #738de9;
-} 
+}
 
 /* Style the tab content */
 .tab-content {
@@ -95,11 +95,11 @@ html, body {
 .close-tab {
     color: gray;
     margin-left: 5px;
+    padding: 5px;
 }
 
 .close-tab:hover {
     color: black;
-    margin-left: 5px;
 }
 
 /* EDITORS */

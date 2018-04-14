@@ -109,7 +109,8 @@ end</pre>
 	 else if (event.target.className == "close-tab") {
 	     console.log(event.target.parentElement)
 	     event.target.parentElement.remove()
-	     
+	     var editorNumber = event.target.parentElement.dataset.number;
+	     deleteEditor(editors, editorNumber)
 	 }
          else{
              tabClickHandler(event, function(clickedEditorNumber){

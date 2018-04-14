@@ -39,3 +39,9 @@ function createNewEditor(editors, editorNumber, _callback) {
 
     _callback(newEditor);
 }
+
+function deleteEditor(editors, editorNumber) {
+    console.log(editors)
+    console.log(editorNumber)
+    editors[editorNumber-1].remove()
+}
