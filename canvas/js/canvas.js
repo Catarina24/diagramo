@@ -81,12 +81,11 @@ function parseElementsToDraw(object) {
                 var img, x, y, label;
 
                 if (obj.image == null) {
-                    img = createImg(objClass.image.path);  // Load the image
+                    img = loadImage(objClass.image.path);  // Load the image
                 }
                 else {
-                    img = createImg(obj.image.path);  // Load the image
+                    img = loadImage(obj.image.path);  // Load the image
                 }
-                img.hide();
 
                 if (obj.position == null) {
                     x = objClass.position.x;
@@ -131,6 +130,12 @@ function createMyImage(x, y, img, label, name) {
     var newImg = new MyImage(pos, img, label, name);
     mapNamesToImgs[name] = newImg;
     images.push(newImg);
+}
+
+var aux;
+
+function preload() {
+    aux = loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Robustness_Diagram_Actor.svg/1024px-Robustness_Diagram_Actor.svg.png');
 }
 
 function setup() {
@@ -254,4 +259,9 @@ function windowResized() {
         updatePositionInEditor(images[i].name, images[i].x, images[i].y, currentEditor);
     }
     updateCanvas(windowWidth/2, windowHeight);
+}
+
+function saveDiagram() {
+    console.log("asd");
+    save();
 }
