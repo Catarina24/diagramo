@@ -150,7 +150,7 @@ class Lexer:
                 return Token(Tag.LABEL)
             elif str == "position":
                 return Token(Tag.POSITION)
-            elif str == "connects":
+            elif str == "connect":
                 return Token(Tag.CONNECTTO)
             elif str == "import":
                 return Token(Tag.IMPORT)
