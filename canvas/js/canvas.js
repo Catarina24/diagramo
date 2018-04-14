@@ -47,6 +47,7 @@ var mapNamesToImgs;
 function reset() {
     images = [];
     isDragging = false;
+    dragImageIndex = -1;
     connections = [];
     mapNamesToImgs = [];
 }
@@ -253,6 +254,25 @@ function drawConnections() {
         const x = dest.x - src.x;
         const y = dest.y - src.y;
 
+        let notDraggedImage;
+        let imageDragged;
+
+        if (dragImageIndex == 0) {
+            imageDragged = 0;
+            notDraggedImage = 1;
+        } else {
+            imageDragged = 1;
+            notDraggedImage = 0;
+        }
+
+        if(Math.abs(x) <= 10 || Math.abs(y) <= 10){
+            if(Math.abs(x) <=10){
+                mapNamesToImgs[connections[i][notDraggedImage]].x = mapNamesToImgs[connections[i][imageDragged]].x;
+            }
+            else{
+                mapNamesToImgs[connections[i][notDraggedImage]].y = mapNamesToImgs[connections[i][imageDragged]].y;
+            }
+        }
         if (y >= x && y >= -x) {
             line(dest.x + dest.width / 2, dest.y, src.x + src.width / 2, src.y + src.height + 15);
         }
@@ -307,4 +327,5 @@ function mouseDragged() {
 
 function mouseReleased() {
     isDragging = false;
+    dragImageIndex = -1;
 }
