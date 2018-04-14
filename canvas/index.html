@@ -14,6 +14,7 @@
 
     <script src="js/libraries/jquery.js" type="text/javascript"></script>
     <script src="js/libraries/ace/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/my-mode.js" type="text/javascript" charset="utf-8"></script>
 
     <script src="js/libraries/p5/p5.min.js"></script>
     <script src="js/libraries/p5/addons/p5.dom.min.js"></script>
@@ -57,9 +58,9 @@ end</pre>
 
      for (var i = 0; i < editors.length; i++) {
          var editor = ace.edit(editors[i]);
-         //dawn, , github, iplastic
+         //dawn, eclipse, github, iplastic
          editor.setTheme("ace/theme/dawn");
-         editor.session.setMode("ace/mode/lua");
+         editor.session.setMode("ace/mode/my-mode");
          editors[i].style.fontSize = '16px';
      }
 
@@ -79,8 +80,8 @@ end</pre>
              addNewTab(numberOfEditors);
              createNewEditor(editors, numberOfEditors + 1, function(newEditor){
                  var editor = ace.edit(newEditor);
-                 editor.setTheme("ace/theme/dawn");
-                 editor.session.setMode("ace/mode/lua");
+		 editor.setTheme("ace/theme/dawn");
+                 editor.session.setMode("ace/mode/my-mode");
                  newEditor.style.fontSize = '16px';
              });
              numberOfEditors++;
@@ -125,8 +126,6 @@ end</pre>
              }
 
              var url = "http://localhost:8080/compile";
-
-	     console.log(files)
 	     
              var request = $.ajax({
                  type: "post",
@@ -135,14 +134,17 @@ end</pre>
 		 dataType: "json",
 		 contentType: "application/json",
                  success: function(res) {
-                    parseElementsToDraw(res);
-		     console.log(res);
+		     if (res.errors != undefined && res.errors.length > 0) {
+			 console.log(res)
+		     } else {
+			 parseElementsToDraw(res);
+			 console.log(res);
+		     }
                  },
                  error: function(err){
-                     console.error(err.status_code);
-                 }
-             });
-             
+                     console.error("No connection to server");
+                 },
+	     });
          }, 1000)
      })
     </script>
