@@ -27,7 +27,7 @@ def compile():
         if file.get("entry"):
             entry = file.get("name")
     p = Parser(entry, files)
-    root = p.parse_program(files)
+    root = p.parse_program()
     if len(p.errors) > 0:
         return json.dumps(dict(errors=p.errors))
     return json.dumps(root.json())

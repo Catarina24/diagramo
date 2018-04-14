@@ -260,6 +260,9 @@ class ObjectAstNode:
         if hasattr(self, "height") and self.height != None: d["height"] = self.height.height
         return d
 
+class ImportAstNode:
+    pass
+
 class RootAstNode:
     classes = []
     objects = []
@@ -289,6 +292,7 @@ class Parser:
     def __init__(self, filepath, files=None):
         self.cur_token = None
         self.errors = []
+        self.files = files
 
         content = None
         if files != None:
@@ -306,10 +310,7 @@ class Parser:
             if self.cur_token.tag == Tag.EOF: return None # dont get stuck here if the error is at the EOF
             self.cur_token = self.lexer.get_token()
 
-    def parse_program(self, files=None):
-        # merge the imported files
-        self.parse_imports(files)
-        # start the actual parsing
+    def parse_program(self):
         root_node = RootAstNode()
         child_node = self.parse_top_level()
         while child_node != None:
@@ -320,23 +321,6 @@ class Parser:
             child_node = self.parse_top_level()
         return root_node
 
-    def parse_imports(self, files):
-        while(self.cur_token.tag == Tag.IMPORT):
-            self.cur_token = self.lexer.get_token()
-            if self.cur_token.tag == Tag.STRING:
-                filepath = self.cur_token.string
-                content = None
-                if files != None:
-                    for file in files:
-                        if file["name"] == filepath:
-                            content = file["content"]
-                success = self.lexer.add_file(filepath, content)
-                if success == False:
-                    self.error("no such file '" + filepath + "'")
-                self.cur_token = self.lexer.get_token()
-            else:
-                self.error("expected a module name")
-
     def parse_top_level(self):
         if self.cur_token.tag == Tag.CLASS:
             self.cur_token = self.lexer.get_token()
@@ -344,11 +328,30 @@ class Parser:
         if self.cur_token.tag == Tag.OBJECT:
             self.cur_token = self.lexer.get_token()
             return self.parse_object()
+        if self.cur_token.tag == Tag.IMPORT:
+            self.cur_token = self.lexer.get_token()
+            return self.parse_import()
         if self.cur_token.tag == Tag.EOF:
             return None
         self.error("expected a top level expression")
         self.skip_until_top_level()
         return ClassAstNode("");
+
+    def parse_import(self):
+        if self.cur_token.tag ==Tag.STRING:
+            filepath = self.cur_token.string
+            content = None
+            if self.files != None:
+                for file in self.files:
+                    if file["name"] == filepath:
+                        content = file["content"]
+            success = self.lexer.add_file(filepath, content)
+            if success == False:
+                self.error("no such file '" + filepath + "'")
+            self.cur_token = self.lexer.get_token()
+            return ImportAstNode()
+        else:
+            self.error("expected a module name")
 
     def parse_class(self):
         if self.cur_token.tag == Tag.ID:
