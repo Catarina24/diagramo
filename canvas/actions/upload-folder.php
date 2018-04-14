@@ -58,14 +58,15 @@ if($uploadOk){
 
             $dir = new DirectoryIterator($pathAux . "/src");
             foreach ($dir as $file) {
-                $filePath = $pathAux . "/src/" . $file->getFileName();
-                $fileAux = fopen($filePath, "r");
-                $content = fread($fileAux, filesize($filePath));
-                fclose($fileAux);
-                $code[$file->getFileName()] = $content;
+                if (!$file->isDot()) {
+                    $filePath = $pathAux . "/src/" . $file->getFileName();
+                    $fileAux = fopen($filePath, "r");
+                    $content = fread($fileAux, filesize($filePath));
+                    fclose($fileAux);
+                    $code[$file->getFileName()] = $content;
+                }
             }
         }
-
     }
     else {
         $status = "ERROR";
