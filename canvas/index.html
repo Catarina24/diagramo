@@ -49,14 +49,24 @@ end</pre>
             </div>
             <div>
                 <div class="tab">
-                    <button class="tablinks active">Console</button>
-                    <button class="tablinks">Resources</button>
+                    <button class="tablinks active" onclick="openConsole(event)">Output</button>
+                    <button class="tablinks" onclick="openCity(event, 'Paris')">Resources</button>
                     <button class="tablinks" onclick="openProjectOptions(event, 'import-export')">Project</button>
                 </div>
                 
                 <div id="import-export" class="tabcontent">
-                    <button style="margin-right: 10px;">Import source code</button> 
-                    <button style="margin-left: 10px;">Export source code</button>
+                    <div>
+                        <button style="margin-right: 10px;"><i style="margin-right: 5px;" class="fa fa-upload" aria-hidden="true"></i>Import project</button> 
+                        <button style="margin-left: 10px;"><i style="margin-right: 5px;" class="fa fa-download" aria-hidden="true"></i>Export project</button>
+                    </div>  
+                </div>
+                
+                <div id="console" class="tabcontent">
+                </div>
+                
+                <div id="Paris" class="tabcontent">
+                    <h3>Paris</h3>
+                    <p>Paris is the capital of France.</p> 
                 </div>
             </div>
             <div id="my-console">
@@ -93,6 +103,46 @@ end</pre>
             document.getElementById(content).style.display = "block";
             evt.currentTarget.className += " active";
         }
+     function openConsole(evt) {
+         var i, tabcontent, tablinks;
+         tabcontent = document.getElementsByClassName("tabcontent");
+         for (i = 0; i < tabcontent.length; i++) {
+             tabcontent[i].style.display = "none";
+         }
+         tablinks = document.getElementsByClassName("tablinks");
+         for (i = 0; i < tablinks.length; i++) {
+             tablinks[i].className = tablinks[i].className.replace(" active", "");
+         }
+         document.getElementById("console").style.display = "block";
+         evt.currentTarget.className += " active";	 
+     }
+     document.getElementById("console").style.display = "block";
+
+     function appendToConsole(text) {
+	 const par = document.createElement("p");
+	 par.innerHTML = "[" + new Date().toLocaleTimeString() + "] " + text;
+	 document.getElementById("console").appendChild(par);
+     }
+
+     function appendErrorToConsole(text) {
+	 const par = document.createElement("p");
+	 par.innerHTML = "<span style=\"color: red\">[" + new Date().toLocaleTimeString() + "] " + text + "</span>"
+	 document.getElementById("console").appendChild(par);
+     }
+     
+     function openCity(evt, cityName) {
+         var i, tabcontent, tablinks;
+         tabcontent = document.getElementsByClassName("tabcontent");
+         for (i = 0; i < tabcontent.length; i++) {
+             tabcontent[i].style.display = "none";
+         }
+         tablinks = document.getElementsByClassName("tablinks");
+         for (i = 0; i < tablinks.length; i++) {
+             tablinks[i].className = tablinks[i].className.replace(" active", "");
+         }
+         document.getElementById(cityName).style.display = "block";
+         evt.currentTarget.className += " active";
+     }
     </script>
 
     <script>
@@ -110,8 +160,6 @@ end</pre>
      var currentEditorNumber = 1;
      var currentEditorFilename = $(".editor-tab.active").text();
      var currentEditor = ace.edit(editors[0]);
-     
-     
 
      $("#test1").on("click", function() {
          componentClickHandler('a1', currentEditor);
@@ -129,9 +177,6 @@ end</pre>
                 processData: false, // NEEDED, DON'T OMIT THIS
                 success: function (msg) {
                     console.log(msg);
-                },
-                complete: function(){
-                    console.log("I came all the way here.");
                 }
             });
         });
@@ -200,23 +245,28 @@ end</pre>
              }
 
              var url = "http://localhost:8080/compile";
+	     appendToConsole("Compiling...");
 	     
              var request = $.ajax({
                  type: "post",
                  url: url,
                  data: JSON.stringify(files),
-                dataType: "json",
-                contentType: "application/json",
+                 dataType: "json",
+                 contentType: "application/json",
                  success: function(res) {
 		     if (res.errors != undefined && res.errors.length > 0) {
 			 console.log(res)
+			 res.errors.forEach(error => {
+			     appendErrorToConsole(error);
+			 });
 		     } else {
 			 parseElementsToDraw(res);
+			 appendToConsole("Compilation successful");
 			 console.log(res);
 		     }
                  },
                  error: function(err){
-                     console.error("No connection to server");
+                     appendErrorToConsole("Compilation failed: no connection to server");
                  },
 	     });
          }, 1000)
