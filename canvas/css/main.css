@@ -124,4 +124,8 @@ html, body {
     display: inline-block;
 }
 
+/* CANVAS */
 
+#diagrama {
+    overflow: hidden;
+}
