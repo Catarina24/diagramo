@@ -344,6 +344,7 @@ class Parser:
                     class_node.connects = self.parse_connects()
 
                 else:
+                    self.error("expected property name (one of label, position, image or connects)")
                     self.cur_token = self.lexer.get_token()
                 # TODO: Error handling and recovery
             self.cur_token = self.lexer.get_token()
@@ -379,6 +380,7 @@ class Parser:
                             object_node.connects = self.parse_connects()
     
                         else:
+                            self.error("expected property name (one of label, position, image or connects)")
                             self.cur_token = self.lexer.get_token()
                         # TODO: Error handling and recovery
                     self.cur_token = self.lexer.get_token()
@@ -389,7 +391,9 @@ class Parser:
         if self.cur_token.tag == ord(":"):
             self.cur_token = self.lexer.get_token()
             if self.cur_token.tag == Tag.STRING:
-                return LabelAstNode(self.cur_token.string)
+                label = self.cur_token.string
+                self.cur_token = self.lexer.get_token()
+                return LabelAstNode(label)
             else:
                 self.error("expected string")
         else:
@@ -406,6 +410,7 @@ class Parser:
                     self.cur_token = self.lexer.get_token()
                     if self.cur_token.tag == Tag.NUM:
                         y = self.cur_token.value
+                        self.cur_token = self.lexer.get_token()
                         return PositionAstNode(x, y)
                     else:
                         self.error("expected a number")
@@ -421,7 +426,9 @@ class Parser:
         if self.cur_token.tag == ord(":"):
             self.cur_token = self.lexer.get_token()
             if self.cur_token.tag == Tag.STRING:
-                return ImageAstNode(self.cur_token.string)
+                path = self.cur_token.string
+                self.cur_token = self.lexer.get_token()
+                return ImageAstNode(path)
             else:
                 self.error("expected a string")
         else:
@@ -453,5 +460,6 @@ class Parser:
                             self.error("expected an identifier")
                 if self.cur_token.tag == Tag.END:
                     self.error("expected a ']'")
+                self.cur_token = self.lexer.get_token()
                 return ConnectsAstNode(connections)
         return None
