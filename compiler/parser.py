@@ -17,7 +17,8 @@ class Tag(IntEnum):
     EOF = -12,
     IMPORT = -13,
     WIDTH = -14,
-    HEIGHT = -15
+    HEIGHT = -15,
+    TEXT = -16
 
 # tokens    
 class Token:
@@ -164,6 +165,8 @@ class Lexer:
                 return Token(Tag.WIDTH)
             elif str == "height":
                 return Token(Tag.HEIGHT)
+            elif str == "text":
+                return Token(Tag.TEXT)
 
             # identifiers
             return Identifier(str)
@@ -230,8 +233,11 @@ class HeightAstNode:
     def __init__(self, height):
         self.height = height
 
-class ClassAstNode:
+class TextAstNode:
+    def __init__(self, text):
+        self.text = text
 
+class ClassAstNode:
     def __init__(self, name):
         self.name = name
 
@@ -243,6 +249,7 @@ class ClassAstNode:
         if hasattr(self, "connects") and self.connects != None: d["connects"] = self.connects.connections
         if hasattr(self, "width") and self.width != None: d["width"] = self.width.width
         if hasattr(self, "height") and self.height != None: d["height"] = self.height.height
+        if hasattr(self, "text") and self.text != None: d["text"] = self.text.text
         return d
 
 class ObjectAstNode:
@@ -258,6 +265,7 @@ class ObjectAstNode:
         if hasattr(self, "connects") and self.connects != None: d["connects"] = self.connects.connections
         if hasattr(self, "width") and self.width != None: d["width"] = self.width.width
         if hasattr(self, "height") and self.height != None: d["height"] = self.height.height
+        if hasattr(self, "text") and self.text != None: d["text"] = self.text.text
         return d
 
 class ImportAstNode:
@@ -294,6 +302,9 @@ class Parser:
         self.errors = []
         self.files = files
         self.ids = []
+        
+        self.classes = []
+        self.references = []
 
         content = None
         if files != None:
@@ -303,8 +314,12 @@ class Parser:
         self.lexer = Lexer(filepath, content)
         self.cur_token = self.lexer.get_token()
 
-    def error(self, message):
-        self.errors.append("{} line {}: Syntax error - {}".format(self.lexer.get_file(), self.lexer.line_no, message))
+    def error(self, message, file=None, line=None):
+        if file == None:
+            file = self.lexer.get_file()
+        if line == None:
+            line = self.lexer.line_no
+        self.errors.append("{} line {}: Syntax error - {}".format(file, line, message))
 
     def skip_until_top_level(self):
         while self.cur_token.tag != Tag.OBJECT and self.cur_token.tag != Tag.CLASS:
@@ -320,6 +335,10 @@ class Parser:
             elif isinstance(child_node, ObjectAstNode):
                 root_node.objects.append(child_node)
             child_node = self.parse_top_level()
+        # before returning, check for bad references
+        for (reference, file, line) in self.references:
+            if reference not in self.classes:
+                self.error("reference to unknown class '" + reference + "'", file, line)
         return root_node
 
     def parse_top_level(self):
@@ -362,6 +381,7 @@ class Parser:
                 self.error("Duplicate id '" + id + "'")
             else:
                 self.ids.append(id)
+                self.classes.append(id)
             self.cur_token = self.lexer.get_token()
             while self.cur_token.tag != Tag.END:
                 
@@ -389,6 +409,10 @@ class Parser:
                     self.cur_token = self.lexer.get_token()
                     class_node.height = self.parse_height()
 
+                elif self.cur_token.tag == Tag.TEXT:
+                    self.cur_token = self.lexer.get_token()
+                    class_node.text = self.parse_text()
+
                 else:
                     self.error("expected property name (one of label, position, image or connects)")
                     self.cur_token = self.lexer.get_token()
@@ -409,6 +433,7 @@ class Parser:
                 if self.cur_token.tag == Tag.ID:
                     parent = self.cur_token.lexeme
                     object_node = ObjectAstNode(parent, name)
+                    self.references.append((parent, self.lexer.get_file(), self.lexer.line_no))
                     self.cur_token = self.lexer.get_token()
                     while self.cur_token.tag != Tag.END:
                         
@@ -430,11 +455,15 @@ class Parser:
 
                         elif self.cur_token.tag == Tag.WIDTH:
                             self.cur_token = self.lexer.get_token()
-                            class_node.width = self.parse_width()
+                            object_node.width = self.parse_width()
 
                         elif self.cur_token.tag == Tag.HEIGHT:
                             self.cur_token = self.lexer.get_token()
-                            class_node.height = self.parse_height()
+                            object_node.height = self.parse_height()
+
+                        elif self.cur_token.tag == Tag.TEXT:
+                            self.cur_token = self.lexer.get_token()
+                            object_node.text = self.parse_text()
     
                         else:
                             self.error("expected property name (one of label, position, image or connects)")
@@ -533,7 +562,7 @@ class Parser:
             self.error("expected ':'")
         return None
 
-    def parse_width(self):
+    def parse_height(self):
         if self.cur_token.tag == ord(":"):
             self.cur_token = self.lexer.get_token()
             if self.cur_token.tag == Tag.NUM:
@@ -542,6 +571,19 @@ class Parser:
                 return HeightAstNode(height)
             else:
                 self.error("expected number")
+        else:
+            self.error("expected ':'")
+        return None
+
+    def parse_text(self):
+        if self.cur_token.tag == ord(":"):
+            self.cur_token = self.lexer.get_token()
+            if self.cur_token.tag == Tag.STRING:
+                text = self.cur_token.string
+                self.cur_token = self.lexer.get_token()
+                return TextAstNode(text)
+            else:
+                self.error("expected string")
         else:
             self.error("expected ':'")
         return None
