@@ -19,11 +19,23 @@
     <script src="js/libraries/p5/p5.min.js"></script>
     <script src="js/libraries/p5/addons/p5.dom.min.js"></script>
     <script src="js/libraries/p5/addons/p5.sound.min.js"></script>
+
+    <style> 
+        div #my-editors-div{
+            resize: horizontal;
+            overflow: auto;
+            border: 0.1px solid lightgray;
+        }
+        div #diagrama{
+            resize: horizontal;
+            overflow: auto;
+        }
+    </style>
 </head>
 
 <body>
     <div class="flex-container-row min-height-parent-height height-parent-height">
-        <div id="my-editors-div" class="flex-1 flex-container-column">
+        <div id="my-editors-div" class="flex-container-column" style="width: 50%">
             <div id="my-editors-tabs">
                 <div class="editor-tab active" data-number="1">new.dgm<span class="close-tab">x</span></div><button class="editor-tab" id="add-new-tab-button">+</button>
             </div>
@@ -32,9 +44,9 @@
                     <pre class="editor tab-content" id="editor-1">
 class actor
     position: 10, 20
-    image: "path/to/image.png"
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Robustness_Diagram_Actor.svg/1024px-Robustness_Diagram_Actor.svg.png"
     label: "Actor"
-    connects: []
+    connect: []
 end
 
 object a1 is actor
@@ -49,8 +61,8 @@ end</pre>
                 </form>
             </div>
         </div>
-        <div id="diagrama" class="flex-1">
-            <button style="float: right">Export</button>
+        <div id="diagrama" class="flex-1" style="margin-bottom: 29px">
+            <button style="position: absolute; right: 0; bottom: 0; margin-bottom: 44px; margin-right: 15px">Export</button>
         </div>
     </div>
 
