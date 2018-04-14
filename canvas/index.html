@@ -181,7 +181,9 @@ end</pre>
          });
      });
 
-     $("body").on("keypress", ".tab-name", function(e){ return e.which != 13; });
+     $("body").on("keypress", ".tab-name", function(e) {
+	 return e.which != 13;
+     });
 
      // on click that will trigger when any .editor-tab chld of #my-editors-tabs is clicked
      $("#my-editors-tabs").on("click", ".editor-tab", function(event) {
@@ -232,24 +234,25 @@ end</pre>
 
              var files = [];
 
-             for(var i = 0; i < editors.length; i++){
-                 var data = {};
-                 data.name = "new" + i + ".dgm";
-                 if(i == 0){
-                     data.entry = true;
-                     data.name = "new.dgm";
-                 }
-                 else{
-                     data.entry = false;
-                     data.name = "new" + (i + 1) + ".dgm";
-                 }
-                 
-                 data.content = ace.edit(editors[i]).getValue();
-                 files.push(data);
-             }
+	     $("#my-editors-tabs").children(".editor-tab").each(function() {
+		 let editor = this.dataset.number;
+		 if (!editor) return;
+
+		 var data = {};
+		 data.name = $(this).find(".tab-name").first().text() + ".dgm"
+
+		 data.entry = false;
+		 if (editor == 1) data.entry = true;
+
+		 data.content = ace.edit(editors[editor-1]).getValue();
+		 files.push(data);
+	     });
+             
 
              var url = "http://localhost:8080/compile";
 	     appendToConsole("Compiling...");
+
+	     console.log(files)
 	     
              var request = $.ajax({
                  type: "post",

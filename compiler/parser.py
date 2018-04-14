@@ -63,12 +63,16 @@ class Lexer:
 
     def add_file(self, filepath, content=None):
         if content == None:
-            file = open(filepath, "r")
-            content = file.read() + "\n"
+            try:
+                file = open(filepath, "r")
+                content = file.read() + "\n"
+            except FileNotFoundError:
+                return False
         start = len(self.stream)
         end = start + len(content)
         self.files.append((filepath, end))
         self.stream += content
+        return True
         
     def append_to_stream(self, content):
         self.stream += "\n" + content
@@ -324,9 +328,11 @@ class Parser:
                 content = None
                 if files != None:
                     for file in files:
-                        if file.name == filepath:
-                            content = file.content
-                self.lexer.add_file(filepath, content)
+                        if file["name"] == filepath:
+                            content = file["content"]
+                success = self.lexer.add_file(filepath, content)
+                if success == False:
+                    self.error("no such file '" + filepath + "'")
                 self.cur_token = self.lexer.get_token()
             else:
                 self.error("expected a module name")
