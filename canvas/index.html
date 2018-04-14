@@ -30,7 +30,7 @@
     <div class="flex-container-row min-height-parent-height height-parent-height">
         <div id="my-editors-div" class="flex-container-column" style="width: 50%">
             <div id="my-editors-tabs">
-                <div class="editor-tab active" data-number="1">new.dgm<span class="close-tab">x</span></div><button class="editor-tab" id="add-new-tab-button">+</button>
+                <div class="editor-tab active" data-number="1"><span class="tab-name" contenteditable="true">new</span>.dgm<span class="close-tab">x</span></div><button class="editor-tab" id="add-new-tab-button">+</button>
             </div>
             <div id="my-editors" class="flex-1">
                 <div class="relative height-parent-height" id="editor-div">
@@ -166,20 +166,22 @@ end</pre>
      });
 
      $('#image-upload-form').on("submit", function (event) {
-            event.preventDefault();
+         event.preventDefault();
 
 
-            $.ajax({
-                url: 'http://localhost:8080/actions/upload-image.php',
-                type: 'POST',
-                data: new FormData(this),
-                contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
-                processData: false, // NEEDED, DON'T OMIT THIS
-                success: function (msg) {
-                    console.log(msg);
-                }
-            });
-        });
+         $.ajax({
+             url: 'http://localhost:8080/actions/upload-image.php',
+             type: 'POST',
+             data: new FormData(this),
+             contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
+             processData: false, // NEEDED, DON'T OMIT THIS
+             success: function (msg) {
+                 console.log(msg);
+             }
+         });
+     });
+
+     $("body").on("keypress", ".tab-name", function(e){ return e.which != 13; });
 
      // on click that will trigger when any .editor-tab chld of #my-editors-tabs is clicked
      $("#my-editors-tabs").on("click", ".editor-tab", function(event) {
@@ -187,18 +189,20 @@ end</pre>
              // pressed + tab
              addNewTab(numberOfEditors);
              createNewEditor(editors, numberOfEditors + 1, function(newEditor){
-                var editor = ace.edit(newEditor);
-                editor.setTheme("ace/theme/dawn");
-                editor.session.setMode("ace/mode/my-mode");
-                newEditor.style.fontSize = '16px';
+                 var editor = ace.edit(newEditor);
+                 editor.setTheme("ace/theme/dawn");
+                 editor.session.setMode("ace/mode/my-mode");
+                 newEditor.style.fontSize = '16px';
              });
              numberOfEditors++;
          }
 	 else if (event.target.className == "close-tab") {
-	     console.log(event.target.parentElement)
 	     event.target.parentElement.remove()
 	     var editorNumber = event.target.parentElement.dataset.number;
 	     deleteEditor(editors, editorNumber)
+	 }
+	 else if (event.target.className == "tab-name") {
+	     console.log("editing tab name")
 	 }
          else{
              tabClickHandler(event, function(clickedEditorNumber){
