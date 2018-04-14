@@ -115,6 +115,11 @@ end</pre>
      })
 
      $('#my-editors-div').resizable({ handles: 'e' });
+     $('#my-editors-div').resize(function() {
+	 const diagram = $('#diagrama');
+	 resizeCanvas(diagram.width(), diagram.height())
+	 updateCanvas(diagram.width(), diagram.height())
+     });
 
      var timeout;
      $('#editor-div').keypress(function() {
