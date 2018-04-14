@@ -294,6 +294,9 @@ class Parser:
         self.errors = []
         self.files = files
         self.ids = []
+        
+        self.classes = []
+        self.references = []
 
         content = None
         if files != None:
@@ -303,8 +306,12 @@ class Parser:
         self.lexer = Lexer(filepath, content)
         self.cur_token = self.lexer.get_token()
 
-    def error(self, message):
-        self.errors.append("{} line {}: Syntax error - {}".format(self.lexer.get_file(), self.lexer.line_no, message))
+    def error(self, message, file=None, line=None):
+        if file == None:
+            file = self.lexer.get_file()
+        if line == None:
+            line = self.lexer.line_no
+        self.errors.append("{} line {}: Syntax error - {}".format(file, line, message))
 
     def skip_until_top_level(self):
         while self.cur_token.tag != Tag.OBJECT and self.cur_token.tag != Tag.CLASS:
@@ -320,6 +327,10 @@ class Parser:
             elif isinstance(child_node, ObjectAstNode):
                 root_node.objects.append(child_node)
             child_node = self.parse_top_level()
+        # before returning, check for bad references
+        for (reference, file, line) in self.references:
+            if reference not in self.classes:
+                self.error("reference to unknown class '" + reference + "'", file, line)
         return root_node
 
     def parse_top_level(self):
@@ -362,6 +373,7 @@ class Parser:
                 self.error("Duplicate id '" + id + "'")
             else:
                 self.ids.append(id)
+                self.classes.append(id)
             self.cur_token = self.lexer.get_token()
             while self.cur_token.tag != Tag.END:
                 
@@ -409,6 +421,7 @@ class Parser:
                 if self.cur_token.tag == Tag.ID:
                     parent = self.cur_token.lexeme
                     object_node = ObjectAstNode(parent, name)
+                    self.references.append((parent, self.lexer.get_file(), self.lexer.line_no))
                     self.cur_token = self.lexer.get_token()
                     while self.cur_token.tag != Tag.END:
                         
