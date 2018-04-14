@@ -44,8 +44,6 @@ $('#folder-upload-form').on("submit", function (event) {
             if (msg.status == "OK") {
                 
                 //call function 
-
-
             }
         },
         error: function (error) {
