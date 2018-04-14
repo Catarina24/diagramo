@@ -26,6 +26,9 @@ class MyImage {
         if (this.y + this.height + 50 > windowHeight) {
             this.y = windowHeight - this.height - 50;
         }
+
+        this.x = Math.round(this.x);
+        this.y = Math.round(this.y);
     }
 
     draw() {
@@ -215,14 +218,14 @@ function mouseDragged() {
     if (isDragging) {
         var newPos = createVector(mouseX - offset.x, mouseY - offset.y);
         images[dragImageIndex].updatePosition(newPos);
-	    updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor)
+	    updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor);
     }
 }
 
 function mouseReleased() {
     isDragging = false;
     if (dragImageIndex != -1)
-        updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor)
+        updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor);
     dragImageIndex = -1;
 }
 
@@ -237,6 +240,7 @@ function windowResized() {
         let x = images[i].x * (windowWidth/2) / canvasWidth;
         let y = images[i].y * windowHeight / canvasHeight;
         images[i].updatePosition(createVector(x, y));
+        updatePositionInEditor(images[i].name, images[i].x, images[i].y, currentEditor);
     }
     updateCanvas(windowWidth/2, windowHeight);
 }
