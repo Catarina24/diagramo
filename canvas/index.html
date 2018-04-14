@@ -92,6 +92,7 @@ end</pre>
          document.getElementById("console").style.display = "block";
          evt.currentTarget.className += " active";	 
      }
+     document.getElementById("console").style.display = "block";
 
      function appendToConsole(text) {
 	 const par = document.createElement("p");
@@ -135,8 +136,6 @@ end</pre>
      var currentEditorNumber = 1;
      var currentEditorFilename = $(".editor-tab.active").text();
      var currentEditor = ace.edit(editors[0]);
-     
-     
 
      $("#test1").on("click", function() {
          componentClickHandler('a1', currentEditor);
