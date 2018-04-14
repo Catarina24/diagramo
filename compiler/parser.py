@@ -227,12 +227,6 @@ class HeightAstNode:
         self.height = height
 
 class ClassAstNode:
-    #label = LabelAstNode("")
-    #position = PositionAstNode(0, 0)
-    #image = ImageAstNode("")
-    #connects = ConnectsAstNode([])
-    #width = WidthAstNode(100)
-    #height = HeightAstNode(100)
 
     def __init__(self, name):
         self.name = name
