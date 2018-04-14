@@ -126,8 +126,6 @@ end</pre>
              }
 
              var url = "http://localhost:8080/compile";
-
-	     console.log(files)
 	     
              var request = $.ajax({
                  type: "post",
@@ -136,14 +134,17 @@ end</pre>
 		 dataType: "json",
 		 contentType: "application/json",
                  success: function(res) {
-                     parseElementsToDraw(res);
-		     console.log(res);
+		     if (res.errors.length > 0) {
+			 console.log(res)
+		     } else {
+			 parseElementsToDraw(res);
+			 console.log(res);
+		     }
                  },
                  error: function(err){
-                     console.error(err.status_code);
-                 }
-             });
-             
+                     console.error("No connection to server");
+                 },
+	     });
          }, 1000)
      })
     </script>

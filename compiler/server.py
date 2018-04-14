@@ -29,7 +29,7 @@ def compile():
     p = Parser(entry, files)
     root = p.parse_program(files)
     if len(p.errors) > 0:
-        return json.dumps(p.errors)
+        return json.dumps(dict(errors=p.errors))
     return json.dumps(root.json())
 
 run()

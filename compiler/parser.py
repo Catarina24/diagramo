@@ -355,7 +355,6 @@ class Parser:
                 else:
                     self.error("expected property name (one of label, position, image or connects)")
                     self.cur_token = self.lexer.get_token()
-                # TODO: Error handling and recovery
             self.cur_token = self.lexer.get_token()
             return class_node
         return None
@@ -391,7 +390,6 @@ class Parser:
                         else:
                             self.error("expected property name (one of label, position, image or connects)")
                             self.cur_token = self.lexer.get_token()
-                        # TODO: Error handling and recovery
                     self.cur_token = self.lexer.get_token()
                     return object_node
         return None
