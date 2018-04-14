@@ -17,14 +17,14 @@ class MyImage {
         if (this.x < 0) {
             this.x = 0;
         }
-        if (this.x + this.width > windowWidth/2) {
-            this.x = windowWidth / 2 - this.width;
+        if (this.x + this.width > canvasWidth) {
+            this.x = canvasWidth - this.width;
         }
         if (this.y < 0) {
             this.y = 0;
         }
-        if (this.y + this.height + 50 > windowHeight) {
-            this.y = windowHeight - this.height - 50;
+        if (this.y + this.height + 50 > canvasHeight) {
+            this.y = canvasHeight - this.height - 50;
         }
 
         this.x = Math.round(this.x);
@@ -262,6 +262,5 @@ function windowResized() {
 }
 
 function saveDiagram() {
-    console.log("asd");
     save();
 }

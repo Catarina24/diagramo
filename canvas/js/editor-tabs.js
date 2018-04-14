@@ -21,10 +21,10 @@ function tabClickHandler(event, _callback){
 function addNewTab(currentNumberOfEditors){
     var newEditorNumber = currentNumberOfEditors + 1;
 
-    var btn = document.createElement("button");
-    btn.className += "editor-tab"; 
+    var btn = document.createElement("div");
+    btn.className += "editor-tab";
     btn.dataset.number = newEditorNumber;
-    btn.textContent = "new" + newEditorNumber + ".dgm";
+    btn.innerHTML = "new" + newEditorNumber + ".dmg <span class=\"close-tab\">x</span>"
 
     $("#add-new-tab-button").before(btn);
 }
@@ -38,4 +38,10 @@ function createNewEditor(editors, editorNumber, _callback) {
     editors.push(newEditor);
 
     _callback(newEditor);
+}
+
+function deleteEditor(editors, editorNumber) {
+    console.log(editors)
+    console.log(editorNumber)
+    editors[editorNumber-1].remove()
 }
