@@ -28,6 +28,10 @@ ul {
     position: relative;
 }
 
+.margin-vertical{
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem; 
+}
 
 /** FLEXBOX HELPERS **/
 
@@ -212,10 +216,6 @@ canvas {
 }
 
 /* EDITOR HELPER */
-
-#resources {
-    columns: 3;
-}
 
 #download {
     position: absolute; 

@@ -65,13 +65,15 @@ end</pre>
                 </div>
                 
                 <div id="resources" class="tabcontent">
+                    <div class="margin-vertical">
+                        <form id="image-upload-form">
+                                <input type="file" name="pic" accept="image/*">
+                                <input type="submit">
+                        </form>
+                    </div>
+                    <div id="resources-list-div">
+                    </div>
                 </div>
-            </div>
-            <div id="my-console">
-                <form id="image-upload-form">
-                    <input type="file" name="pic" accept="image/*">
-                    <input type="submit">
-                </form>
             </div>
         </div>
         <div id="diagrama" class="flex-1" >
@@ -142,7 +144,7 @@ end</pre>
          document.getElementById("resources").style.display = "block";
          evt.currentTarget.className += " active";
 
-         var resourcesElement = $("#resources");
+         var resourcesElement = $("#resources-list-div");
          updateResourcesList(resourcesElement, function(listOfResources){
             resourcesElement.html(""); // clean element
             resourcesElement.append(listOfResources);
@@ -169,10 +171,6 @@ end</pre>
      var currentEditorFilename = $(".editor-tab.active").text();
      var currentEditor = ace.edit(editors[0]);
 
-     $("#test1").on("click", function() {
-         componentClickHandler('a1', currentEditor);
-     });
-
      $('#image-upload-form').on("submit", function (event) {
          event.preventDefault();
 
@@ -184,7 +182,14 @@ end</pre>
              contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
              processData: false, // NEEDED, DON'T OMIT THIS
              success: function (msg) {
-                 console.log(msg);
+                console.log(msg);
+
+                // Refresh
+                var resourcesElement = $("#resources-list-div");
+                updateResourcesList(resourcesElement, function(listOfResources){
+                resourcesElement.html(""); // clean element
+                resourcesElement.append(listOfResources);
+                })
              }
          });
      });
