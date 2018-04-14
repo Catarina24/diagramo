@@ -234,3 +234,9 @@ canvas {
     justify-content: center;
 }
 
+.myMarker {
+    position:absolute;
+    background:rgba(204,229,255,1);
+    z-index:20;
+}
+

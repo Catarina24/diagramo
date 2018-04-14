@@ -35,7 +35,7 @@ class MyImage {
     draw() {
         noStroke();
         image(this.img, this.x, this.y, this.width, this.height);
-	    text(this.text, this.x + 5, this.y - 5, this.width - 10)
+	    text(this.text, this.x + 5, this.y + 5, this.width - 10);
         text(this.label, this.x, this.y + this.height + 15, this.width);
         textAlign(CENTER);
     }
@@ -242,6 +242,7 @@ function mousePressed() {
             isDragging = true;
             dragImageIndex = i;
             offset = createVector(mouseX - images[i].x, mouseY - images[i].y);
+            //highlightText(images[i].name, currentEditor, 1);
         }
     }
 }
@@ -252,15 +253,21 @@ function mouseHoverImage() {
     for (var i = 0; i < images.length; i++) {
         if (images[i].isSame(m) && !isDragging) {
             cursor(HAND);
+            highlightText(images[i].name, currentEditor, 1);
+        }
+        else{
+            highlightText(images[i].name, currentEditor, 0);
         }
     }
+
+    //TODO highlightText();
 }
 
 function mouseDragged() {
     if (isDragging) {
         var newPos = createVector(mouseX - offset.x, mouseY - offset.y);
         images[dragImageIndex].updatePosition(newPos);
-	    updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor);
+        updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor);
     }
 }
 
@@ -268,6 +275,7 @@ function mouseReleased() {
     isDragging = false;
     if (dragImageIndex != -1)
         updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor);
+        //highlightText(images[dragImageIndex].name, currentEditor, 0);
     dragImageIndex = -1;
 }
 
