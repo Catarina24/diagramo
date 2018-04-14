@@ -47,133 +47,10 @@ var mapNamesToImgs;
 function reset() {
     images = [];
     isDragging = false;
+    dragImageIndex = -1;
     connections = [];
     mapNamesToImgs = [];
 }
-
-/*const object = {
-    "classes": [
-        {
-            "connects": [
-                "adf"
-            ],
-            "image": {
-                "path": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Robustness_Diagram_Actor.svg/1024px-Robustness_Diagram_Actor.svg.png"
-            },
-            "label": "I am an actor mate",
-            "name": "actor",
-            "position": {
-                "x": 10,
-                "y": 20
-            }
-        },
-        {
-            "connects": [
-                "adf"
-            ],
-            "image": {
-                "path": "http://www.prologicwebdesign.com/wp-content/uploads/2015/07/Oracle-Database-support.png"
-            },
-            "label": "I am an db mate",
-            "name": "database",
-            "position": {
-                "x": 10,
-                "y": 20
-            }
-        },
-        {
-            "connects": [
-                "adf"
-            ],
-            "image": {
-                "path": "https://cdn0.iconfinder.com/data/icons/cloud-data-technology-1-3/63/47-512.png"
-            },
-            "label": "I am an server mate",
-            "name": "server",
-            "position": {
-                "x": 150,
-                "y": 250
-            }
-        },
-        {
-            "connects": [
-                "adf"
-            ],
-            "image": {
-                "path": "path/to/image.png"
-            },
-            "label": "I am an machine mate",
-            "name": "machine",
-            "position": {
-                "x": 40,
-                "y": 40
-            }
-        },
-        {
-            "connects": [],
-            "image": {
-                "path": "image/of/a/database.png"
-            },
-            "label": "Database",
-            "name": "system",
-            "position": {
-                "x": 0,
-                "y": 0
-            }
-        }
-    ],
-    "objects": [
-        {
-            "connects": [
-                "d1"
-            ],
-            "label": "I am so smart",
-            "name": "a1",
-            "parent": "actor",
-            "position": {
-                "x": 100,
-                "y": 100
-            }
-        },
-        {
-            "connects": [],
-            "label": "I am so smart",
-            "name": "d1",
-            "parent": "database",
-            "position": {
-                "x": 200,
-                "y": 100
-            }
-        },
-        {
-            "connects": [
-                "d1"
-            ],
-            "label": "I am so smart",
-            "name": "s1",
-            "parent": "server",
-            "position": {
-                "x": 200,
-                "y": 200
-            }
-        },
-        {
-            "connects": [
-                "s1"
-            ],
-            "image": {
-                "path": "https://www.shareicon.net/download/2015/12/26/693394_monitor.svg"
-            },
-            "label": "I am so smart",
-            "name": "m1",
-            "parent": "machine",
-            "position": {
-                "x": 200,
-                "y": 100
-            }
-        }
-    ]
-};*/
 
 function parseElementsToDraw(object) {
     reset();
@@ -253,6 +130,25 @@ function drawConnections() {
         const x = dest.x - src.x;
         const y = dest.y - src.y;
 
+        let notDraggedImage;
+        let imageDragged;
+
+        if (dragImageIndex == 0) {
+            imageDragged = 0;
+            notDraggedImage = 1;
+        } else {
+            imageDragged = 1;
+            notDraggedImage = 0;
+        }
+
+        if(Math.abs(x) <= 10 || Math.abs(y) <= 10){
+            if(Math.abs(x) <=10){
+                mapNamesToImgs[connections[i][notDraggedImage]].x = mapNamesToImgs[connections[i][imageDragged]].x;
+            }
+            else{
+                mapNamesToImgs[connections[i][notDraggedImage]].y = mapNamesToImgs[connections[i][imageDragged]].y;
+            }
+        }
         if (y >= x && y >= -x) {
             line(dest.x + dest.width / 2, dest.y, src.x + src.width / 2, src.y + src.height + 15);
         }
@@ -302,9 +198,12 @@ function mouseDragged() {
     if (isDragging) {
         var newPos = createVector(mouseX - offset.x, mouseY - offset.y);
         images[dragImageIndex].updatePosition(newPos);
+	updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor)
     }
 }
 
 function mouseReleased() {
     isDragging = false;
+    updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor)
+    dragImageIndex = -1;
 }

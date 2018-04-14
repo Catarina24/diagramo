@@ -15,7 +15,9 @@ class Tag(IntEnum):
     POSITION = -10,
     CONNECTTO = -11,
     EOF = -12,
-    IMPORT = -13
+    IMPORT = -13,
+    WIDTH = -14,
+    HEIGHT = -15
 
 # tokens    
 class Token:
@@ -150,10 +152,14 @@ class Lexer:
                 return Token(Tag.LABEL)
             elif str == "position":
                 return Token(Tag.POSITION)
-            elif str == "connects":
+            elif str == "connect":
                 return Token(Tag.CONNECTTO)
             elif str == "import":
                 return Token(Tag.IMPORT)
+            elif str == "width":
+                return Token(Tag.WIDTH)
+            elif str == "height":
+                return Token(Tag.HEIGHT)
 
             # identifiers
             return Identifier(str)
@@ -212,11 +218,15 @@ class ConnectsAstNode:
     def __init__(self, connections):
         self.connections = connections
 
+class WidthAstNode:
+    def __init__(self, width):
+        self.width = width
+
+class HeightAstNode:
+    def __init__(self, height):
+        self.height = height
+
 class ClassAstNode:
-    label = LabelAstNode("")
-    position = PositionAstNode(0, 0)
-    image = ImageAstNode("")
-    connects = ConnectsAstNode([])
 
     def __init__(self, name):
         self.name = name
@@ -227,6 +237,8 @@ class ClassAstNode:
         if hasattr(self, "position") and self.position != None: d["position"] = self.position.json()
         if hasattr(self, "image") and self.image != None: d["image"] = self.image.json()
         if hasattr(self, "connects") and self.connects != None: d["connects"] = self.connects.connections
+        if hasattr(self, "width") and self.width != None: d["width"] = self.width.width
+        if hasattr(self, "height") and self.height != None: d["height"] = self.height.height
         return d
 
 class ObjectAstNode:
@@ -240,6 +252,8 @@ class ObjectAstNode:
         if hasattr(self, "position") and self.position != None: d["position"] = self.position.json()
         if hasattr(self, "image") and self.image != None: d["image"] = self.image.json()
         if hasattr(self, "connects") and self.connects != None: d["connects"] = self.connects.connections
+        if hasattr(self, "width") and self.width != None: d["width"] = self.width.width
+        if hasattr(self, "height") and self.height != None: d["height"] = self.height.height
         return d
 
 class RootAstNode:
@@ -352,10 +366,17 @@ class Parser:
                     self.cur_token = self.lexer.get_token()
                     class_node.connects = self.parse_connects()
 
+                elif self.cur_token.tag == Tag.WIDTH:
+                    self.cur_token = self.lexer.get_token()
+                    class_node.width = self.parse_width()
+
+                elif self.cur_token.tag == Tag.HEIGHT:
+                    self.cur_token = self.lexer.get_token()
+                    class_node.height = self.parse_height()
+
                 else:
                     self.error("expected property name (one of label, position, image or connects)")
                     self.cur_token = self.lexer.get_token()
-                # TODO: Error handling and recovery
             self.cur_token = self.lexer.get_token()
             return class_node
         return None
@@ -383,15 +404,22 @@ class Parser:
                         elif self.cur_token.tag == Tag.IMAGE:
                             self.cur_token = self.lexer.get_token()
                             object_node.image = self.parse_image()
-                    
+                            
                         elif self.cur_token.tag == Tag.CONNECTTO:
                             self.cur_token = self.lexer.get_token()
                             object_node.connects = self.parse_connects()
+
+                        elif self.cur_token.tag == Tag.WIDTH:
+                            self.cur_token = self.lexer.get_token()
+                            class_node.width = self.parse_width()
+
+                        elif self.cur_token.tag == Tag.HEIGHT:
+                            self.cur_token = self.lexer.get_token()
+                            class_node.height = self.parse_height()
     
                         else:
                             self.error("expected property name (one of label, position, image or connects)")
                             self.cur_token = self.lexer.get_token()
-                        # TODO: Error handling and recovery
                     self.cur_token = self.lexer.get_token()
                     return object_node
         return None
@@ -471,4 +499,30 @@ class Parser:
                     self.error("expected a ']'")
                 self.cur_token = self.lexer.get_token()
                 return ConnectsAstNode(connections)
+        return None
+
+    def parse_width(self):
+        if self.cur_token.tag == ord(":"):
+            self.cur_token = self.lexer.get_token()
+            if self.cur_token.tag == Tag.NUM:
+                width = self.cur_token.value
+                self.cur_token = self.lexer.get_token()
+                return WidthAstNode(width)
+            else:
+                self.error("expected number")
+        else:
+            self.error("expected ':'")
+        return None
+
+    def parse_width(self):
+        if self.cur_token.tag == ord(":"):
+            self.cur_token = self.lexer.get_token()
+            if self.cur_token.tag == Tag.NUM:
+                height = self.cur_token.value
+                self.cur_token = self.lexer.get_token()
+                return HeightAstNode(height)
+            else:
+                self.error("expected number")
+        else:
+            self.error("expected ':'")
         return None
