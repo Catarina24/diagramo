@@ -241,7 +241,8 @@ end</pre>
          timeout = setTimeout(function() {
 
              var files = [];
-
+	     let valid = false;
+	     
 	     $("#my-editors-tabs").children(".editor-tab").each(function() {
 		 let editor = this.dataset.number;
 		 if (!editor) return;
@@ -250,12 +251,19 @@ end</pre>
 		 data.name = $(this).find(".tab-name").first().text() + ".dgm"
 
 		 data.entry = false;
-		 if (editor == 1) data.entry = true;
+		 if (data.name == "main.dgm") {
+		     data.entry = true;
+		     valid = true;
+		 }
 
 		 data.content = ace.edit(editors[editor-1]).getValue();
 		 files.push(data);
 	     });
-             
+
+	     if (!valid) {
+		 appendErrorToConsole("Missing entry point 'main.dgm'");
+		 return;
+	     }
 
              var url = "http://localhost:8080/compile";
 	     appendToConsole("Compiling...");
