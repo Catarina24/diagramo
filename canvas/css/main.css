@@ -126,6 +126,10 @@ html, body {
 
 /* CANVAS */
 
+canvas {
+    background-color: #fafafa;
+}
+
 #diagrama {
     overflow: hidden;
 }
