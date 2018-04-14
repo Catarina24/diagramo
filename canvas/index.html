@@ -46,6 +46,20 @@ object a1 is actor
 end</pre>
                 </div>
             </div>
+            <div>
+                <div class="tab">
+                    <button class="tablinks active" onclick="openConsole(event)">Output</button>
+                    <button class="tablinks" onclick="openCity(event, 'Paris')">Resources</button>
+                </div>
+                
+                <div id="console" class="tabcontent">
+                </div>
+                
+                <div id="Paris" class="tabcontent">
+                <h3>Paris</h3>
+                <p>Paris is the capital of France.</p> 
+                </div>
+            </div>
             <div id="my-console">
                 <form id="image-upload-form">
                     <input type="file" name="pic" accept="image/*">
@@ -54,7 +68,7 @@ end</pre>
             </div>
         </div>
         <div id="diagrama" class="flex-1" >
-            <button style="position: absolute; right: 0; bottom: 0; margin-bottom: 15px; margin-right: 15px">Export</button>
+            <button style="position: absolute; right: 0; bottom: 0; margin-bottom: 44px; margin-right: 15px" onclick="saveDiagram()">Export</button>
         </div>
     </div>
 
@@ -63,6 +77,50 @@ end</pre>
     <script src="js/editor-tabs.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/server-communication.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/canvas.js"></script>
+
+    <script>
+     function openConsole(evt) {
+         var i, tabcontent, tablinks;
+         tabcontent = document.getElementsByClassName("tabcontent");
+         for (i = 0; i < tabcontent.length; i++) {
+             tabcontent[i].style.display = "none";
+         }
+         tablinks = document.getElementsByClassName("tablinks");
+         for (i = 0; i < tablinks.length; i++) {
+             tablinks[i].className = tablinks[i].className.replace(" active", "");
+         }
+         document.getElementById("console").style.display = "block";
+         evt.currentTarget.className += " active";	 
+     }
+     document.getElementById("console").style.display = "block";
+
+     function appendToConsole(text) {
+	 const par = document.createElement("p");
+	 par.innerHTML = "[" + new Date().toLocaleTimeString() + "] " + text;
+	 document.getElementById("console").appendChild(par);
+     }
+
+     function appendErrorToConsole(text) {
+	 const par = document.createElement("p");
+	 par.innerHTML = "<span style=\"color: red\">[" + new Date().toLocaleTimeString() + "] " + text + "</span>"
+	 document.getElementById("console").appendChild(par);
+     }
+     
+     function openCity(evt, cityName) {
+         var i, tabcontent, tablinks;
+         tabcontent = document.getElementsByClassName("tabcontent");
+         for (i = 0; i < tabcontent.length; i++) {
+             tabcontent[i].style.display = "none";
+         }
+         tablinks = document.getElementsByClassName("tablinks");
+         for (i = 0; i < tablinks.length; i++) {
+             tablinks[i].className = tablinks[i].className.replace(" active", "");
+         }
+         document.getElementById(cityName).style.display = "block";
+         evt.currentTarget.className += " active";
+     }
+    </script>
+
     <script>
      var editors = $('.editor');
      var numberOfEditors = editors.length;
@@ -78,8 +136,6 @@ end</pre>
      var currentEditorNumber = 1;
      var currentEditorFilename = $(".editor-tab.active").text();
      var currentEditor = ace.edit(editors[0]);
-     
-     
 
      $("#test1").on("click", function() {
          componentClickHandler('a1', currentEditor);
@@ -165,23 +221,28 @@ end</pre>
              }
 
              var url = "http://localhost:8080/compile";
+	     appendToConsole("Compiling...");
 	     
              var request = $.ajax({
                  type: "post",
                  url: url,
                  data: JSON.stringify(files),
-                dataType: "json",
-                contentType: "application/json",
+                 dataType: "json",
+                 contentType: "application/json",
                  success: function(res) {
 		     if (res.errors != undefined && res.errors.length > 0) {
 			 console.log(res)
+			 res.errors.forEach(error => {
+			     appendErrorToConsole(error);
+			 });
 		     } else {
 			 parseElementsToDraw(res);
+			 appendToConsole("Compilation successful");
 			 console.log(res);
 		     }
                  },
                  error: function(err){
-                     console.error("No connection to server");
+                     appendErrorToConsole("Compilation failed: no connection to server");
                  },
 	     });
          }, 1000)
