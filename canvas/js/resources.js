@@ -11,8 +11,6 @@ function updateResourcesList (resourcesDiv, _callback) {
             
             res = JSON.parse(res);
             
-            console.log(res);
-
             if(res.status != "OK"){
                 console.error("An error ocurred with the 'get-list-of-images' action.");
                 return;

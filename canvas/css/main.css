@@ -234,3 +234,11 @@ canvas {
     justify-content: center;
 }
 
+/* RESOURCES */
+#resources-list-div ul {
+    list-style-type: none;
+}
+
+#resources-list-div ul li {
+    padding-top: 3px;
+}
