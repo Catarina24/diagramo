@@ -1,5 +1,6 @@
 import "system.dgm"
 
+# This is a comment
 class actor
     position: 10, 20
     image: "path/to/image.png"

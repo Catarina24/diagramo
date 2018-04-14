@@ -158,6 +158,15 @@ class Lexer:
             # identifiers
             return Identifier(str)
 
+        # comments
+        if self.last_char == "#":
+            self.last_char = self.get_char()
+            while self.last_char != None and self.last_char != "\n" and self.last_char != "\r":
+                self.last_char = self.get_char()
+
+            if self.last_char != None:
+                return self.get_token()
+
         # recognize numbers
         if self.is_digit(self.last_char):
             str = self.last_char
