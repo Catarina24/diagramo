@@ -3,11 +3,7 @@ header('Access-Control-Allow-Origin: *');
 
 $message = "";
 
-$target_dir = "../static/images/";
-
-if (!file_exists($target_dir)) {
-    mkdir($target_dir, 0777, true);
-}
+$target_dir = "../";
 
 $file = $_FILES["pic"];
 $target_file = $target_dir . basename($file["name"]);
