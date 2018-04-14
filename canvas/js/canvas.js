@@ -264,3 +264,7 @@ function windowResized() {
 function saveDiagram() {
     save();
 }
+
+function exportProject() {
+    console.log("Vou exportar");
+}
