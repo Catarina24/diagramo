@@ -264,7 +264,8 @@ end</pre>
      });*/
 
      var timeout;
-     $('#editor-div').keypress(function() {
+     $('#editor-div').keyup(function() {
+	 console.log("key is down")
 	 
          if(timeout) {
              clearTimeout(timeout);
