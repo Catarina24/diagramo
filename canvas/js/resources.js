@@ -6,7 +6,6 @@ function updateResourcesList (resourcesDiv, _callback) {
     $.ajax({
         url: '/actions/get-list-of-images.php',
         type: 'POST',
-        data: new FormData(this),
         contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
         processData: false, // NEEDED, DON'T OMIT THIS
         success: function (res) {
