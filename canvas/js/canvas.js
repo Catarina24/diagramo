@@ -94,9 +94,9 @@ function parseElementsToDraw(object) {
                     label = obj.label;
                 }
 
-                if (obj.connect != null) {
-                    for (let i = 0; i < obj.connect.length; i++) {
-                        connections.push([obj.name, obj.connect[i]]);
+                if (obj.connects != null) {
+                    for (let i = 0; i < obj.connects.length; i++) {
+                        connections.push([obj.name, obj.connects[i]]);
                     }
                 }
 
@@ -198,10 +198,12 @@ function mouseDragged() {
     if (isDragging) {
         var newPos = createVector(mouseX - offset.x, mouseY - offset.y);
         images[dragImageIndex].updatePosition(newPos);
+	updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor)
     }
 }
 
 function mouseReleased() {
     isDragging = false;
+    updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor)
     dragImageIndex = -1;
 }
