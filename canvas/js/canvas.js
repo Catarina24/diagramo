@@ -1,13 +1,14 @@
 class MyImage {
 
-    constructor(pos, img, label, name) {
+    constructor(pos, width, height, img, label, name, text) {
         this.x = pos.x || 0;
         this.y = pos.y || 0;
-        this.width = 100;
-        this.height = 100;
+        this.width = width | 100;
+        this.height = height | 100;
         this.img = img;
         this.label = label || '';
         this.name = name;
+	this.text = text || '';
     }
 
     updatePosition(pos) {
@@ -34,6 +35,7 @@ class MyImage {
     draw() {
         noStroke();
         image(this.img, this.x, this.y, this.width, this.height);
+	text(this.text, this.x + 5, this.y + 5, this.width - 10)
         text(this.label, this.x, this.y + this.height + 15, this.width);
         textAlign(CENTER);
     }
@@ -79,7 +81,7 @@ function parseElementsToDraw(object) {
     object.objects.forEach(obj => {
         object.classes.forEach(objClass => {
             if (objClass.name == obj.parent) {
-                var img, x, y, label;
+                var img, x, y, width, height, label, text;
 
                 if (obj.image == null && objClass.image != null) {
                     img = loadImage(objClass.image.path);  // Load the image
@@ -117,21 +119,39 @@ function parseElementsToDraw(object) {
                     label = obj.label;
                 }
 
+		if (obj.text == null) {
+		    text = objClass.text;
+		} else {
+		    text = obj.text;
+		}
+
+		if (obj.width == null) {
+		    width = objClass.width;
+		} else {
+		    width = obj.width;
+		}
+
+		if (obj.height == null) {
+		    height = objClass.height;
+		} else {
+		    height = obj.height;
+		}
+
                 if (obj.connects != null) {
                     for (let i = 0; i < obj.connects.length; i++) {
                         connections.push([obj.name, obj.connects[i]]);
                     }
                 }
 
-                createMyImage(x, y, img, label, obj.name);
+                createMyImage(x, y, width, height, img, label, obj.name, text);
             }
         });
     });
 }
 
-function createMyImage(x, y, img, label, name) {
+function createMyImage(x, y, width, height, img, label, name, text) {
     var pos = createVector(x, y);
-    var newImg = new MyImage(pos, img, label, name);
+    var newImg = new MyImage(pos, width, height, img, label, name, text);
     mapNamesToImgs[name] = newImg;
     images.push(newImg);
 }

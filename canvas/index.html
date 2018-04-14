@@ -9,6 +9,10 @@
     <meta name="description" content="The coding diagram creator">
     <meta name="author" content="break.">
 
+    <!--<link rel="icon" href="img/favicon.ico" type="image/x-icon" />-->
+    <link rel="icon" href="favicon.ico" type="image/x-icon"> 
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"> 
+
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="js/libraries/jquery-ui-1.12.1.custom/jquery-ui.css"></link>
@@ -79,13 +83,15 @@ end</pre>
                 </div>
 
                 <div id="resources" class="tabcontent">
+                    <div class="margin-vertical">
+                        <form id="image-upload-form">
+                                <input type="file" name="pic" accept="image/*">
+                                <input type="submit" value="Upload Image">
+                        </form>
+                    </div>
+                    <div id="resources-list-div">
+                    </div>
                 </div>
-            </div>
-            <div id="my-console">
-                <form id="image-upload-form">
-                    <input type="file" name="pic" accept="image/*">
-                    <input type="submit">
-                </form>
             </div>
         </div>
         <div id="diagrama" class="flex-1">
@@ -118,190 +124,201 @@ end</pre>
             document.getElementById(content).style.display = "block";
             evt.currentTarget.className += " active";
         }
-        function openConsole(evt) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tablinks = document.getElementsByClassName("tablinks");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-            document.getElementById("console").style.display = "block";
-            evt.currentTarget.className += " active";
-        }
-        document.getElementById("console").style.display = "block";
+     function openConsole(evt) {
+         var i, tabcontent, tablinks;
+         tabcontent = document.getElementsByClassName("tabcontent");
+         for (i = 0; i < tabcontent.length; i++) {
+             tabcontent[i].style.display = "none";
+         }
+         tablinks = document.getElementsByClassName("tablinks");
+         for (i = 0; i < tablinks.length; i++) {
+             tablinks[i].className = tablinks[i].className.replace(" active", "");
+         }
+         document.getElementById("console").style.display = "block";
+         evt.currentTarget.className += " active";	 
+     }
+     document.getElementById("console").style.display = "block";
 
-        function appendToConsole(text) {
-            const par = document.createElement("p");
-            par.innerHTML = "[" + new Date().toLocaleTimeString() + "] " + text;
-            document.getElementById("console").appendChild(par);
-        }
+     function appendToConsole(text) {
+	 const par = document.createElement("p");
+	 par.innerHTML = "[" + new Date().toLocaleTimeString() + "] " + text;
+	 document.getElementById("console").appendChild(par);
+     }
 
-        function appendErrorToConsole(text) {
-            const par = document.createElement("p");
-            par.innerHTML = "<span style=\"color: red\">[" + new Date().toLocaleTimeString() + "] " + text + "</span>"
-            document.getElementById("console").appendChild(par);
-        }
+     function appendErrorToConsole(text) {
+	 const par = document.createElement("p");
+	 par.innerHTML = "<span style=\"color: red\">[" + new Date().toLocaleTimeString() + "] " + text + "</span>"
+	 document.getElementById("console").appendChild(par);
+     }
+     
+     function openResources(evt) {
+         var i, tabcontent, tablinks;
+         tabcontent = document.getElementsByClassName("tabcontent");
+         for (i = 0; i < tabcontent.length; i++) {
+             tabcontent[i].style.display = "none";
+         }
+         tablinks = document.getElementsByClassName("tablinks");
+         for (i = 0; i < tablinks.length; i++) {
+             tablinks[i].className = tablinks[i].className.replace(" active", "");
+         }
+         document.getElementById("resources").style.display = "block";
+         evt.currentTarget.className += " active";
 
-        function openResources(evt) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tablinks = document.getElementsByClassName("tablinks");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-            document.getElementById("resources").style.display = "block";
-            evt.currentTarget.className += " active";
-
-            var resourcesElement = $("#resources");
-            updateResourcesList(resourcesElement, function (listOfResources) {
-                resourcesElement.html(""); // clean element
-                resourcesElement.append(listOfResources);
-                console.log("Resources update successful.");
-                console.log(listOfResources);
-                console.log(resourcesElement);
-            })
-        }
+         var resourcesElement = $("#resources-list-div");
+         updateResourcesList(resourcesElement, function(listOfResources){
+            resourcesElement.html(""); // clean element
+            resourcesElement.append(listOfResources);
+            console.log("Resources update successful.");
+            console.log(listOfResources);
+            console.log(resourcesElement);
+         })
+     }
     </script>
 
     <script>
-        var editors = $('.editor');
-        var numberOfEditors = editors.length;
+     var editors = $('.editor');
+     var numberOfEditors = editors.length;
 
-        for (var i = 0; i < editors.length; i++) {
-            var editor = ace.edit(editors[i]);
-            //dawn, eclipse, github, iplastic
-            editor.setTheme("ace/theme/dawn");
-            editor.session.setMode("ace/mode/my-mode");
-            editors[i].style.fontSize = '16px';
-        }
+     for (var i = 0; i < editors.length; i++) {
+         var editor = ace.edit(editors[i]);
+         //dawn, eclipse, github, iplastic
+         editor.setTheme("ace/theme/dawn");
+         editor.session.setMode("ace/mode/my-mode");
+         editors[i].style.fontSize = '16px';
+     }
 
-        var currentEditorNumber = 1;
-        var currentEditorFilename = $(".editor-tab.active").text();
-        var currentEditor = ace.edit(editors[0]);
+     var currentEditorNumber = 1;
+     var currentEditorFilename = $(".editor-tab.active").text();
+     var currentEditor = ace.edit(editors[0]);
 
-        $("#test1").on("click", function () {
-            componentClickHandler('a1', currentEditor);
-        });
-
-        $('#image-upload-form').on("submit", function (event) {
-            event.preventDefault();
+     $('#image-upload-form').on("submit", function (event) {
+         event.preventDefault();
 
 
-            $.ajax({
-                url: 'http://localhost:8080/actions/upload-image.php',
-                type: 'POST',
-                data: new FormData(this),
-                contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
-                processData: false, // NEEDED, DON'T OMIT THIS
-                success: function (msg) {
-                    console.log(msg);
-                }
-            });
-        });
+         $.ajax({
+             url: '/actions/upload-image.php',
+             type: 'POST',
+             data: new FormData(this),
+             contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
+             processData: false, // NEEDED, DON'T OMIT THIS
+             success: function (msg) {
+                console.log(msg);
 
-        $("body").on("keypress", ".tab-name", function (e) {
-            return e.which != 13;
-        });
+                // Refresh
+                var resourcesElement = $("#resources-list-div");
+                updateResourcesList(resourcesElement, function(listOfResources){
+                resourcesElement.html(""); // clean element
+                resourcesElement.append(listOfResources);
+                })
+             }
+         });
+     });
 
-        // on click that will trigger when any .editor-tab chld of #my-editors-tabs is clicked
-        $("#my-editors-tabs").on("click", ".editor-tab", function (event) {
-            if (event.target.id == "add-new-tab-button") {
-                // pressed + tab
-                addNewTab(numberOfEditors);
-                createNewEditor(editors, numberOfEditors + 1, function (newEditor) {
-                    var editor = ace.edit(newEditor);
-                    editor.setTheme("ace/theme/dawn");
-                    editor.session.setMode("ace/mode/my-mode");
-                    newEditor.style.fontSize = '16px';
-                });
-                numberOfEditors++;
-            }
-            else if (event.target.className == "close-tab") {
-                event.target.parentElement.remove()
-                var editorNumber = event.target.parentElement.dataset.number;
-                deleteEditor(editors, editorNumber)
-            }
-            else if (event.target.className == "tab-name") {
-                console.log("editing tab name")
-            }
-            else {
-                tabClickHandler(event, function (clickedEditorNumber) {
-                    currentEditorNumber = clickedEditorNumber;
-                    currentEditorFilename = $(".editor-tab.active").text();
-                    currentEditor = ace.edit(editors[currentEditorNumber - 1]);
-                    console.log(currentEditor.getValue());
-                });
-            }
-        })
+     $("body").on("keypress", ".tab-name", function(e) {
+	 return e.which != 13;
+     });
 
-        $('#my-editors-div').resizable({ handles: 'e' });
-        $('#my-editors-div').resize(function () {
-            const diagram = $('#diagrama');
-            resizeCanvas(diagram.width(), diagram.height())
-            updateCanvas(diagram.width(), diagram.height())
-        });
+     // on click that will trigger when any .editor-tab chld of #my-editors-tabs is clicked
+     $("#my-editors-tabs").on("click", ".editor-tab", function(event) {
+         if(event.target.id == "add-new-tab-button"){
+             // pressed + tab
+             addNewTab(numberOfEditors);
+             createNewEditor(editors, numberOfEditors + 1, function(newEditor){
+                 var editor = ace.edit(newEditor);
+                 editor.setTheme("ace/theme/dawn");
+                 editor.session.setMode("ace/mode/my-mode");
+                 newEditor.style.fontSize = '16px';
+             });
+             numberOfEditors++;
+         }
+	 else if (event.target.className == "close-tab") {
+	     event.target.parentElement.remove()
+	     var editorNumber = event.target.parentElement.dataset.number;
+	     deleteEditor(editors, editorNumber)
+	 }
+	 else if (event.target.className == "tab-name") {
+	     console.log("editing tab name")
+	 }
+         else{
+             tabClickHandler(event, function(clickedEditorNumber){
+                 currentEditorNumber = clickedEditorNumber;
+                 currentEditorFilename = $(".editor-tab.active").text();
+                 currentEditor = ace.edit(editors[currentEditorNumber-1]);
+                 console.log(currentEditor.getValue());
+             });
+         }
+     })
 
-        var timeout;
-        $('#editor-div').keypress(function () {
-            if (timeout) {
-                clearTimeout(timeout);
-                timeout = null;
-            }
+     $('#my-editors-div').resizable({ handles: 'e' });
+     $('#my-editors-div').resize(function() {
+	 const diagram = $('#diagrama');
+	 resizeCanvas(diagram.width(), diagram.height())
+	 updateCanvas(diagram.width(), diagram.height())
+     });
 
-            timeout = setTimeout(function () {
+     var timeout;
+     $('#editor-div').keypress(function() {
+         if(timeout) {
+             clearTimeout(timeout);
+             timeout = null;
+         }
 
-                var files = [];
+         timeout = setTimeout(function() {
 
-                $("#my-editors-tabs").children(".editor-tab").each(function () {
-                    let editor = this.dataset.number;
-                    if (!editor) return;
+             var files = [];
+	     let valid = false;
+	     
+	     $("#my-editors-tabs").children(".editor-tab").each(function() {
+		 let editor = this.dataset.number;
+		 if (!editor) return;
 
-                    var data = {};
-                    data.name = $(this).find(".tab-name").first().text() + ".dgm"
+		 var data = {};
+		 data.name = $(this).find(".tab-name").first().text() + ".dgm"
 
-                    data.entry = false;
-                    if (editor == 1) data.entry = true;
+		 data.entry = false;
+		 if (data.name == "main.dgm") {
+		     data.entry = true;
+		     valid = true;
+		 }
 
-                    data.content = ace.edit(editors[editor - 1]).getValue();
-                    files.push(data);
-                });
+		 data.content = ace.edit(editors[editor-1]).getValue();
+		 files.push(data);
+	     });
 
+	     if (!valid) {
+		 appendErrorToConsole("Missing entry point 'main.dgm'");
+		 return;
+	     }
 
-                var url = "http://localhost:8080/compile";
-                appendToConsole("Compiling...");
+             var url = "http://localhost:8080/compile";
+	     appendToConsole("Compiling...");
 
-                console.log(files)
-
-                var request = $.ajax({
-                    type: "post",
-                    url: url,
-                    data: JSON.stringify(files),
-                    dataType: "json",
-                    contentType: "application/json",
-                    success: function (res) {
-                        if (res.errors != undefined && res.errors.length > 0) {
-                            console.log(res)
-                            res.errors.forEach(error => {
-                                appendErrorToConsole(error);
-                            });
-                        } else {
-                            parseElementsToDraw(res);
-                            appendToConsole("Compilation successful");
-                            console.log(res);
-                        }
-                    },
-                    error: function (err) {
-                        appendErrorToConsole("Compilation failed: no connection to server");
-                    },
-                });
-            }, 1000)
-        })
+	     console.log(files)
+	     
+             var request = $.ajax({
+                 type: "post",
+                 url: url,
+                 data: JSON.stringify(files),
+                 dataType: "json",
+                 contentType: "application/json",
+                 success: function(res) {
+		     if (res.errors != undefined && res.errors.length > 0) {
+			 console.log(res)
+			 res.errors.forEach(error => {
+			     appendErrorToConsole(error);
+			 });
+		     } else {
+			 parseElementsToDraw(res);
+			 appendToConsole("Compilation successful");
+			 console.log(res);
+		     }
+                 },
+                 error: function(err){
+                     appendErrorToConsole("Compilation failed: no connection to server");
+                 },
+	     });
+         }, 1000)
+     })
     </script>
 </body>
 
