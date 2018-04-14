@@ -13,6 +13,22 @@ class MyImage {
     updatePosition(pos) {
         this.x = pos.x;
         this.y = pos.y;
+
+        if (this.x < 0) {
+            this.x = 0;
+        }
+        if (this.x + this.width > windowWidth/2) {
+            this.x = windowWidth / 2 - this.width;
+        }
+        if (this.y < 0) {
+            this.y = 0;
+        }
+        if (this.y + this.height + 50 > windowHeight) {
+            this.y = windowHeight - this.height - 50;
+        }
+
+        this.x = Math.round(this.x);
+        this.y = Math.round(this.y);
     }
 
     draw() {
@@ -43,6 +59,10 @@ var offset;
 //connections
 var connections;
 var mapNamesToImgs;
+
+//canvas
+var canvasWidth;
+var canvasHeight;
 
 function reset() {
     images = [];
@@ -117,7 +137,7 @@ function setup() {
     reset();
     createCanvas(windowWidth / 2, windowHeight)
         .parent('diagrama');
-    //parseElementsToDraw(object);
+    updateCanvas(windowWidth/2, windowHeight);
 }
 
 function drawConnections() {
@@ -198,12 +218,29 @@ function mouseDragged() {
     if (isDragging) {
         var newPos = createVector(mouseX - offset.x, mouseY - offset.y);
         images[dragImageIndex].updatePosition(newPos);
-	updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor)
+	    updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor);
     }
 }
 
 function mouseReleased() {
     isDragging = false;
-    updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor)
+    if (dragImageIndex != -1)
+        updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor);
     dragImageIndex = -1;
+}
+
+function updateCanvas(x, y) {
+    canvasWidth = x;
+    canvasHeight = y;
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth/2, windowHeight);
+    for (var i=0; i <  images.length; i++) {
+        let x = images[i].x * (windowWidth/2) / canvasWidth;
+        let y = images[i].y * windowHeight / canvasHeight;
+        images[i].updatePosition(createVector(x, y));
+        updatePositionInEditor(images[i].name, images[i].x, images[i].y, currentEditor);
+    }
+    updateCanvas(windowWidth/2, windowHeight);
 }
