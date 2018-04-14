@@ -37,14 +37,45 @@ if ($uploadOk == 0) {
 }
 
 $status = "";
+$done = "";
 
-if($uploadOk){
-    $status = "OK";
+if($uploadOk){    
+    $zip = new ZipArchive;
+    $res = $zip->open($target_file);
+    $pathAux = "../static/projects/" . basename($file["name"], ".zip");
+
+    if ($res === TRUE) {
+        $status = "OK";
+
+        //Unzip .zip
+        if (!file_exists($pathAux)) {
+            mkdir($pathAux, 0777, true);
+            $zip->extractTo($pathAux);
+            $zip->close();
+
+            //Extract code from src folder
+            $code = array();
+
+            $dir = new DirectoryIterator($pathAux . "/src");
+            foreach ($dir as $file) {
+                if (!$file->isDot()) {
+                    $filePath = $pathAux . "/src/" . $file->getFileName();
+                    $fileAux = fopen($filePath, "r");
+                    $content = fread($fileAux, filesize($filePath));
+                    fclose($fileAux);
+                    $code[$file->getFileName()] = $content;
+                }
+            }
+        }
+    }
+    else {
+        $status = "ERROR";
+    }
 }
 else{
     $status = "ERROR";
 }
 
-echo json_encode(array("status" => $status, "message" => $message));
+echo json_encode(array("status" => $status, "message" => $message, "code" => $code));
 
 ?>
