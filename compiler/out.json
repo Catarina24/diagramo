@@ -1,131 +1,25 @@
 {
     "classes": [
         {
-            "connects": [
-                "adf"
-            ],
+            "connects": [],
             "image": {
                 "path": "path/to/image.png"
             },
-            "label": "I am an actor mate",
+            "label": "Actor",
             "name": "actor",
             "position": {
                 "x": 10,
                 "y": 20
             }
-        },
-        {
-            "connects": [
-                "adf"
-            ],
-            "image": {
-                "path": "path/to/image.png"
-            },
-            "label": "I am an db mate",
-            "name": "database",
-            "position": {
-                "x": 10,
-                "y": 20
-            }
-        },
-        {
-            "connects": [
-                "adf"
-            ],
-            "image": {
-                "path": "path/to/image.png"
-            },
-            "label": "I am an server mate",
-            "name": "server",
-            "position": {
-                "x": 10,
-                "y": 20
-            }
-        },
-        {
-            "connects": [
-                "adf"
-            ],
-            "image": {
-                "path": "path/to/image.png"
-            },
-            "label": "I am an machine mate",
-            "name": "machine",
-            "position": {
-                "x": 10,
-                "y": 20
-            }
-        },
-        {
-            "connects": [],
-            "image": {
-                "path": "image/of/a/database.png"
-            },
-            "label": "Database",
-            "name": "system",
-            "position": {
-                "x": 0,
-                "y": 0
-            }
         }
     ],
     "objects": [
         {
-            "connects": [
-                "d1"
-            ],
-            "image": {
-                "path": "hello/world.png"
-            },
-            "label": "I am so smart",
             "name": "a1",
             "parent": "actor",
             "position": {
-                "x": 100,
-                "y": 100
-            }
-        },
-        {
-            "connects": [],
-            "image": {
-                "path": "hello/world.png"
-            },
-            "label": "I am so smart",
-            "name": "d1",
-            "parent": "database",
-            "position": {
-                "x": 200,
-                "y": 100
-            }
-        },
-        {
-            "connects": [
-                "d1"
-            ],
-            "image": {
-                "path": "hello/world.png"
-            },
-            "label": "I am so smart",
-            "name": "s1",
-            "parent": "server",
-            "position": {
-                "x": 200,
-                "y": 200
-            }
-        },
-        {
-            "connects": [
-                "s1"
-            ],
-            "image": {
-                "path": "hello/world.png"
-            },
-            "label": "I am so smart",
-            "name": "m1",
-            "parent": "machine",
-            "position": {
-                "x": 200,
-                "y": 100
+                "x": 50,
+                "y": 50
             }
         }
     ]
