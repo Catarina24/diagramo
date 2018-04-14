@@ -32,6 +32,7 @@ class MyImage {
     }
 
     draw() {
+        noStroke();
         image(this.img, this.x, this.y, this.width, this.height);
         text(this.label, this.x, this.y + this.height + 15, this.width);
         textAlign(CENTER);
@@ -80,9 +81,12 @@ function parseElementsToDraw(object) {
             if (objClass.name == obj.parent) {
                 var img, x, y, label;
 
-                if (obj.image == null) {
+                if (obj.image == null && objClass.image != null) {
                     img = loadImage(objClass.image.path);  // Load the image
                 }
+                else if(obj.image == null && objClass.image == null){
+                    img = loadImage("https://cdn2.iconfinder.com/data/icons/image-1/64/Image-12-512.png");
+                } 
                 else {
                     img = loadImage(obj.image.path);  // Load the image
                 }
@@ -132,12 +136,6 @@ function createMyImage(x, y, img, label, name) {
     images.push(newImg);
 }
 
-var aux;
-
-function preload() {
-    aux = loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Robustness_Diagram_Actor.svg/1024px-Robustness_Diagram_Actor.svg.png');
-}
-
 function setup() {
     reset();
     createCanvas(windowWidth / 2, windowHeight)
@@ -152,8 +150,8 @@ function drawConnections() {
         const src = mapNamesToImgs[connections[i][0]];
         const dest = mapNamesToImgs[connections[i][1]];
 
-        const x = dest.x - src.x;
-        const y = dest.y - src.y;
+        const x = (dest.x + dest.width/2) - (src.x + src.width/2);
+        const y = (dest.y + dest.height/2) - (src.y + src.height/2);
 
         let notDraggedImage;
         let imageDragged;
@@ -175,15 +173,23 @@ function drawConnections() {
             }
         }
         if (y >= x && y >= -x) {
+            stroke(111, 107, 142); 
+            strokeWeight(3);
             line(dest.x + dest.width / 2, dest.y, src.x + src.width / 2, src.y + src.height + 15);
         }
         else if (y <= -x && y >= x) {
+            stroke(111, 107, 142);
+            strokeWeight(3); 
             line(dest.x + dest.width, dest.y + dest.height / 2, src.x, src.y + src.height / 2);
         }
         else if (y <= x && y <= -x) {
+            stroke(111, 107, 142);
+            strokeWeight(3);
             line(dest.x + dest.width / 2, dest.y + dest.height + 15, src.x + src.width / 2, src.y);
         }
         else if (y >= -x && y <= x) {
+            stroke(111, 107, 142);
+            strokeWeight(3);
             line(dest.x, dest.y + dest.height / 2, src.x + src.width, src.y + src.height / 2);
         }
     }
