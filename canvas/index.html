@@ -39,7 +39,7 @@
         <div id="my-editors-div" class="flex-container-column" style="width: 50%">
             <div id="my-editors-tabs">
                 <div class="editor-tab active" data-number="1">
-                    <span class="tab-name" contenteditable="true">new</span>.dgm
+                    <span class="tab-name" contenteditable="true">main</span>.dgm
                     <span class="close-tab">x</span>
                 </div>
                 <button class="editor-tab" id="add-new-tab-button">+</button>
@@ -86,8 +86,8 @@ end</pre>
                 <div id="resources" class="tabcontent">
                     <div class="margin-vertical">
                         <form id="image-upload-form">
-                                <input type="file" name="pic" accept="image/*">
-                                <input type="submit" value="Upload Image">
+			    <label for="upload-image" style="cursor: pointer;"><span style="text-decoration: underline">Upload image...</span></label>
+			    <input id="upload-image" name="pic" type="file" onchange="$(this).closest('form').submit();" style="opacity: 0; position: absolute; z-index: -1;" /> 
                         </form>
                     </div>
                     <div id="resources-list-div">
@@ -173,9 +173,6 @@ end</pre>
          updateResourcesList(resourcesElement, function(listOfResources){
             resourcesElement.html(""); // clean element
             resourcesElement.append(listOfResources);
-            console.log("Resources update successful.");
-            console.log(listOfResources);
-            console.log(resourcesElement);
          })
      }
     </script>
@@ -196,9 +193,9 @@ end</pre>
      var currentEditorFilename = $(".editor-tab.active").text();
      var currentEditor = ace.edit(editors[0]);
 
-     $('#image-upload-form').on("submit", function (event) {
+     $('#image-upload-form').submit(function (event) {
+	 console.log("Am here")
          event.preventDefault();
-
 
          $.ajax({
              url: '/actions/upload-image.php',
@@ -207,14 +204,14 @@ end</pre>
              contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
              processData: false, // NEEDED, DON'T OMIT THIS
              success: function (msg) {
-                console.log(msg);
+                 console.log(msg);
 
-                // Refresh
-                var resourcesElement = $("#resources-list-div");
-                updateResourcesList(resourcesElement, function(listOfResources){
-                resourcesElement.html(""); // clean element
-                resourcesElement.append(listOfResources);
-                })
+                 // Refresh
+                 var resourcesElement = $("#resources-list-div");
+                 updateResourcesList(resourcesElement, function(listOfResources){
+                     resourcesElement.html(""); // clean element
+                     resourcesElement.append(listOfResources);
+                 })
              }
          });
      });
@@ -259,10 +256,17 @@ end</pre>
 	 const diagram = $('#diagrama');
 	 resizeCanvas(diagram.width(), diagram.height())
 	 updateCanvas(diagram.width(), diagram.height())
-     });
+     })
+
+     /*
+     $("#image-upload-button").onchange(function () {
+	 $("#image-upload-form").submit();
+     });*/
 
      var timeout;
-     $('#editor-div').keypress(function() {
+     $('#editor-div').keyup(function() {
+	 console.log("key is down")
+	 
          if(timeout) {
              clearTimeout(timeout);
              timeout = null;
