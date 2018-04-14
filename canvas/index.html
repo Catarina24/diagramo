@@ -327,7 +327,55 @@ end</pre>
                  },
 	     });
          }, 1000)
-     })
+     });
+
+
+    $('#folder-upload-form').on("submit", function (event) {
+        event.preventDefault();
+
+        $.ajax({
+            url: 'actions/upload-folder.php',
+            type: 'POST',
+            data: new FormData(this),
+            contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
+            processData: false, // NEEDED, DON'T OMIT THIS
+            success: function (dataJson) {
+                msg = JSON.parse(dataJson);
+
+                if (msg.status == "OK") {
+                    console.log(msg.code);
+                    var editors = $('.editor');
+
+                    $("#my-editors-tabs").children(".editor-tab").each(function() {
+                        let editor = this.dataset.number;
+                        if (!editor) return;
+
+                        this.remove();
+                        deleteEditor(editors, editor);
+                    });
+
+                    for(var i in msg.code){
+                        var filename = i;
+                        var content = msg.code[i];
+
+                        console.log(filename, content);
+
+                        addNewTab(editors.length, filename);
+                        
+                        createNewEditorWithText(editors, editors.length + 1, content, function(newEditor){
+                            var editor = ace.edit(newEditor);
+                            editor.setTheme("ace/theme/dawn");
+                            editor.session.setMode("ace/mode/my-mode");
+                            newEditor.style.fontSize = '16px';
+                        });
+                    }
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    });
     </script>
 </body>
 

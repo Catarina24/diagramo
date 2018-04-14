@@ -27,27 +27,3 @@ buttonExport.addEventListener('click', function (event) {
         saveAs(content, "project.zip");
     });
 });
-
-
-$('#folder-upload-form').on("submit", function (event) {
-    event.preventDefault();
-
-    $.ajax({
-        url: 'actions/upload-folder.php',
-        type: 'POST',
-        data: new FormData(this),
-        contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
-        processData: false, // NEEDED, DON'T OMIT THIS
-        success: function (msgJson) {
-            msg = JSON.parse(msgJson);
-            console.log(msg);
-            if (msg.status == "OK") {
-                
-                //call function 
-            }
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-});
