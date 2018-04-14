@@ -22,13 +22,14 @@
 </head>
 
 <body>
-    <div class="flex-container min-height-screen-height">
-        <div class="flex-div min-height-parent-height" id="my-editors">
+    <div class="flex-container-row min-height-parent-height height-parent-height">
+        <div id="my-editors-div" class="flex-1 flex-container-column">
             <div id="my-editors-tabs">
                 <button class="editor-tab active" data-number="1">new.dgm</button><button class="editor-tab" id="add-new-tab-button">+</button>
             </div>
-            <div class="relative min-height-parent-height" id="editor-div">
-                <pre class="editor tab-content" id="editor-1">
+            <div id="my-editors" class="flex-1">
+                <div class="relative height-parent-height" id="editor-div">
+                    <pre class="editor tab-content" id="editor-1">
 class actor
     position: 10, 20
     image: "path/to/image.png"
@@ -39,10 +40,16 @@ end
 object a1 is actor
     position: 50, 50
 end</pre>
+                </div>
             </div>
-
+            <div id="my-console">
+                <form action="http://localhost:8080/actions/upload-image.php">
+                    <input type="file" name="pic" accept="image/*">
+                    <input type="submit">
+                </form>
+            </div>
         </div>
-        <div class="flex-div" id="diagrama">
+        <div id="diagrama" class="flex-1">
             <button style="float: right">Export</button>
         </div>
     </div>
@@ -67,6 +74,7 @@ end</pre>
      var currentEditorNumber = 1;
      var currentEditorFilename = $(".editor-tab.active").text();
      var currentEditor = ace.edit(editors[0]);
+     
      
 
      $("#test1").on("click", function() {

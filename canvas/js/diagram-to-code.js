@@ -1,4 +1,4 @@
-function componentClickHandler(element, editor){
+function updatePositionInEditor(element, x, y, editor){
 
     var code = editor.getValue();
 
@@ -14,10 +14,7 @@ function componentClickHandler(element, editor){
 
     var objectCode = objectDeclarationMatch[0]; // only first match
 
-    var newPositionX = 69;
-    var newPositionY = 69;
-
-    ChangeObjectPosition(objectCode, newPositionX, newPositionY, function(newObjectCode) {
+    ChangeObjectPosition(objectCode, x, y, function(newObjectCode) {
         var newCode = code.replace(objectCode, newObjectCode);
         editor.setValue(newCode, -1); // -1 moves the cursor to begining, 1 moves cursor to end
     });

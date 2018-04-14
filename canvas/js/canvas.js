@@ -23,9 +23,8 @@ class MyImage {
         if (this.y < 0) {
             this.y = 0;
         }
-        if (this.y + this.height > windowHeight) {
-            //wtf this magic number
-            this.y = windowHeight - this.height - 12;
+        if (this.y + this.height + 50 > windowHeight) {
+            this.y = windowHeight - this.height - 50;
         }
     }
 
@@ -58,9 +57,14 @@ var offset;
 var connections;
 var mapNamesToImgs;
 
+//canvas
+var canvasWidth;
+var canvasHeight;
+
 function reset() {
     images = [];
     isDragging = false;
+    dragImageIndex = -1;
     connections = [];
     mapNamesToImgs = [];
 }
@@ -107,9 +111,9 @@ function parseElementsToDraw(object) {
                     label = obj.label;
                 }
 
-                if (obj.connect != null) {
-                    for (let i = 0; i < obj.connect.length; i++) {
-                        connections.push([obj.name, obj.connect[i]]);
+                if (obj.connects != null) {
+                    for (let i = 0; i < obj.connects.length; i++) {
+                        connections.push([obj.name, obj.connects[i]]);
                     }
                 }
 
@@ -130,8 +134,7 @@ function setup() {
     reset();
     createCanvas(windowWidth / 2, windowHeight)
         .parent('diagrama');
-    noStroke();
-    //parseElementsToDraw(object);
+    updateCanvas(windowWidth/2, windowHeight);
 }
 
 function drawConnections() {
@@ -144,6 +147,25 @@ function drawConnections() {
         const x = dest.x - src.x;
         const y = dest.y - src.y;
 
+        let notDraggedImage;
+        let imageDragged;
+
+        if (dragImageIndex == 0) {
+            imageDragged = 0;
+            notDraggedImage = 1;
+        } else {
+            imageDragged = 1;
+            notDraggedImage = 0;
+        }
+
+        if(Math.abs(x) <= 10 || Math.abs(y) <= 10){
+            if(Math.abs(x) <=10){
+                mapNamesToImgs[connections[i][notDraggedImage]].x = mapNamesToImgs[connections[i][imageDragged]].x;
+            }
+            else{
+                mapNamesToImgs[connections[i][notDraggedImage]].y = mapNamesToImgs[connections[i][imageDragged]].y;
+            }
+        }
         if (y >= x && y >= -x) {
             line(dest.x + dest.width / 2, dest.y, src.x + src.width / 2, src.y + src.height + 15);
         }
@@ -193,13 +215,28 @@ function mouseDragged() {
     if (isDragging) {
         var newPos = createVector(mouseX - offset.x, mouseY - offset.y);
         images[dragImageIndex].updatePosition(newPos);
+	    updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor)
     }
 }
 
 function mouseReleased() {
     isDragging = false;
+    if (dragImageIndex != -1)
+        updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor)
+    dragImageIndex = -1;
+}
+
+function updateCanvas(x, y) {
+    canvasWidth = x;
+    canvasHeight = y;
 }
 
 function windowResized() {
     resizeCanvas(windowWidth/2, windowHeight);
+    for (var i=0; i <  images.length; i++) {
+        let x = images[i].x * (windowWidth/2) / canvasWidth;
+        let y = images[i].y * windowHeight / canvasHeight;
+        images[i].updatePosition(createVector(x, y));
+    }
+    updateCanvas(windowWidth/2, windowHeight);
 }
