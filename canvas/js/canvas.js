@@ -8,7 +8,7 @@ class MyImage {
         this.img = img;
         this.label = label || '';
         this.name = name;
-	this.text = text || '';
+	    this.text = text || '';
     }
 
     updatePosition(pos) {
@@ -35,7 +35,7 @@ class MyImage {
     draw() {
         noStroke();
         image(this.img, this.x, this.y, this.width, this.height);
-	text(this.text, this.x + 5, this.y + 5, this.width - 10)
+	    text(this.text, this.x + 5, this.y - 5, this.width - 10)
         text(this.label, this.x, this.y + this.height + 15, this.width);
         textAlign(CENTER);
     }
@@ -289,8 +289,4 @@ function windowResized() {
 
 function saveDiagram() {
     save();
-}
-
-function exportProject() {
-    console.log("Vou exportar");
 }
