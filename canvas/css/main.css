@@ -144,6 +144,22 @@ html, body {
     border: none;
 }
 
+button.tablinks {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 14px;
+    transition: 0.3s;
+    font-size: 12px;
+    font-family: sans;
+    margin-bottom: 0;
+    box-sizing: border-box;
+    line-height: 16px;
+    width: 100px;
+}
+
 /* EDITORS */
 
 #editor-div{
