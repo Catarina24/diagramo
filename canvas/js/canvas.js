@@ -241,6 +241,7 @@ function mouseReleased() {
 }
 
 function updateCanvas(x, y) {
+    console.log(x, y)
     canvasWidth = x;
     canvasHeight = y;
 }
