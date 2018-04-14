@@ -1,6 +1,6 @@
 class MyImage {
 
-    constructor(pos, img, label, name) {
+    constructor(pos, img, label, name, text) {
         this.x = pos.x || 0;
         this.y = pos.y || 0;
         this.width = 100;
@@ -8,6 +8,7 @@ class MyImage {
         this.img = img;
         this.label = label || '';
         this.name = name;
+	this.text = text || '';
     }
 
     updatePosition(pos) {
@@ -34,6 +35,7 @@ class MyImage {
     draw() {
         noStroke();
         image(this.img, this.x, this.y, this.width, this.height);
+	text(this.text, this.x + 5, this.y + 5, this.width - 10)
         text(this.label, this.x, this.y + this.height + 15, this.width);
         textAlign(CENTER);
     }
@@ -79,7 +81,7 @@ function parseElementsToDraw(object) {
     object.objects.forEach(obj => {
         object.classes.forEach(objClass => {
             if (objClass.name == obj.parent) {
-                var img, x, y, label;
+                var img, x, y, label, text;
 
                 if (obj.image == null && objClass.image != null) {
                     img = loadImage(objClass.image.path);  // Load the image
@@ -117,21 +119,27 @@ function parseElementsToDraw(object) {
                     label = obj.label;
                 }
 
+		if (obj.text == null) {
+		    text = objClass.text;
+		} else {
+		    text = obj.text;
+		}
+
                 if (obj.connects != null) {
                     for (let i = 0; i < obj.connects.length; i++) {
                         connections.push([obj.name, obj.connects[i]]);
                     }
                 }
 
-                createMyImage(x, y, img, label, obj.name);
+                createMyImage(x, y, img, label, obj.name, text);
             }
         });
     });
 }
 
-function createMyImage(x, y, img, label, name) {
+function createMyImage(x, y, img, label, name, text) {
     var pos = createVector(x, y);
-    var newImg = new MyImage(pos, img, label, name);
+    var newImg = new MyImage(pos, img, label, name, text);
     mapNamesToImgs[name] = newImg;
     images.push(newImg);
 }
