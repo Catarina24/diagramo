@@ -81,9 +81,12 @@ function parseElementsToDraw(object) {
             if (objClass.name == obj.parent) {
                 var img, x, y, label;
 
-                if (obj.image == null) {
+                if (obj.image == null && objClass.image != null) {
                     img = loadImage(objClass.image.path);  // Load the image
                 }
+                else if(obj.image == null && objClass.image == null){
+                    img = loadImage("https://cdn2.iconfinder.com/data/icons/image-1/64/Image-12-512.png");
+                } 
                 else {
                     img = loadImage(obj.image.path);  // Load the image
                 }
@@ -131,12 +134,6 @@ function createMyImage(x, y, img, label, name) {
     var newImg = new MyImage(pos, img, label, name);
     mapNamesToImgs[name] = newImg;
     images.push(newImg);
-}
-
-var aux;
-
-function preload() {
-    aux = loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Robustness_Diagram_Actor.svg/1024px-Robustness_Diagram_Actor.svg.png');
 }
 
 function setup() {
