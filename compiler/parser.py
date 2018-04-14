@@ -455,15 +455,15 @@ class Parser:
 
                         elif self.cur_token.tag == Tag.WIDTH:
                             self.cur_token = self.lexer.get_token()
-                            class_node.width = self.parse_width()
+                            object_node.width = self.parse_width()
 
                         elif self.cur_token.tag == Tag.HEIGHT:
                             self.cur_token = self.lexer.get_token()
-                            class_node.height = self.parse_height()
+                            object_node.height = self.parse_height()
 
                         elif self.cur_token.tag == Tag.TEXT:
                             self.cur_token = self.lexer.get_token()
-                            class_node.text = self.parse_text()
+                            object_node.text = self.parse_text()
     
                         else:
                             self.error("expected property name (one of label, position, image or connects)")
@@ -562,7 +562,7 @@ class Parser:
             self.error("expected ':'")
         return None
 
-    def parse_width(self):
+    def parse_height(self):
         if self.cur_token.tag == ord(":"):
             self.cur_token = self.lexer.get_token()
             if self.cur_token.tag == Tag.NUM:
