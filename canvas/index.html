@@ -86,7 +86,8 @@ end</pre>
                 <div id="resources" class="tabcontent">
                     <div class="margin-vertical">
                         <form id="image-upload-form">
-			    <input id="image-upload-button" type="file" id="file" />
+			    <label for="upload-image" style="cursor: pointer;"><span style="text-decoration: underline">Upload image...</span></label>
+			    <input id="upload-image" name="pic" type="file" onchange="$(this).closest('form').submit();" style="opacity: 0; position: absolute; z-index: -1;" /> 
                         </form>
                     </div>
                     <div id="resources-list-div">
@@ -192,7 +193,8 @@ end</pre>
      var currentEditorFilename = $(".editor-tab.active").text();
      var currentEditor = ace.edit(editors[0]);
 
-     $('#image-upload-form').on("submit", function (event) {
+     $('#image-upload-form').submit(function (event) {
+	 console.log("Am here")
          event.preventDefault();
 
          $.ajax({
@@ -256,12 +258,14 @@ end</pre>
 	 updateCanvas(diagram.width(), diagram.height())
      })
 
+     /*
      $("#image-upload-button").onchange(function () {
 	 $("#image-upload-form").submit();
-     });
+     });*/
 
      var timeout;
      $('#editor-div').keypress(function() {
+	 
          if(timeout) {
              clearTimeout(timeout);
              timeout = null;
