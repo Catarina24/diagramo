@@ -69,14 +69,19 @@ html, body {
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 14px 16px;
+    padding: 10px 14px;
     transition: 0.3s;
-    font-size: 17px;
+    font-size: 12px;
+    font-family: sans;
+    margin-bottom: 0;
+    box-sizing: border-box;
+    line-height: 16px;
 }
 
 /* Create an active/current tablink class */
 .editor-tab.active {
     background-color: #ccc;
+    box-shadow: inset 0 -2px 0 #738de9;
 }
 
 /* Style the tab content */
@@ -85,6 +90,16 @@ html, body {
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
+}
+
+.close-tab {
+    color: gray;
+    margin-left: 5px;
+    padding: 5px;
+}
+
+.close-tab:hover {
+    color: black;
 }
 
 /* EDITORS */

@@ -191,6 +191,7 @@ function draw() {
     }
     updateCursor();
     drawConnections();
+    mouseHoverImage();
 }
 
 function updateCursor() {
@@ -210,6 +211,16 @@ function mousePressed() {
             isDragging = true;
             dragImageIndex = i;
             offset = createVector(mouseX - images[i].x, mouseY - images[i].y);
+        }
+    }
+}
+
+function mouseHoverImage() {
+    var m = createVector(mouseX, mouseY);
+
+    for (var i = 0; i < images.length; i++) {
+        if (images[i].isSame(m) && !isDragging) {
+            cursor(HAND);
         }
     }
 }

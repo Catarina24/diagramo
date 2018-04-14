@@ -37,7 +37,7 @@
     <div class="flex-container-row min-height-parent-height height-parent-height">
         <div id="my-editors-div" class="flex-container-column" style="width: 50%">
             <div id="my-editors-tabs">
-                <button class="editor-tab active" data-number="1">new.dgm</button><button class="editor-tab" id="add-new-tab-button">+</button>
+                <div class="editor-tab active" data-number="1">new.dgm<span class="close-tab">x</span></div><button class="editor-tab" id="add-new-tab-button">+</button>
             </div>
             <div id="my-editors" class="flex-1">
                 <div class="relative height-parent-height" id="editor-div">
@@ -95,7 +95,7 @@ end</pre>
 
      // on click that will trigger when any .editor-tab chld of #my-editors-tabs is clicked
      $("#my-editors-tabs").on("click", ".editor-tab", function(event) {
-         if(event.target.dataset.number == null){
+         if(event.target.id == "add-new-tab-button"){
              // pressed + tab
              addNewTab(numberOfEditors);
              createNewEditor(editors, numberOfEditors + 1, function(newEditor){
@@ -106,6 +106,12 @@ end</pre>
              });
              numberOfEditors++;
          }
+	 else if (event.target.className == "close-tab") {
+	     console.log(event.target.parentElement)
+	     event.target.parentElement.remove()
+	     var editorNumber = event.target.parentElement.dataset.number;
+	     deleteEditor(editors, editorNumber)
+	 }
          else{
              tabClickHandler(event, function(clickedEditorNumber){
                  currentEditorNumber = clickedEditorNumber;
