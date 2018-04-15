@@ -250,6 +250,19 @@ function mousePressed() {
     }
 }
 
+function getCurrentEditor() {
+    result = null;
+    $("#my-editors-tabs").children(".editor-tab").each(function() {
+        let editor = this.dataset.number;
+        if (!editor) return;
+
+	if ($(this).hasClass("active")) {
+	    result = document.getElementById("editor-" + editor);
+	}
+    });
+    return result;
+}
+
 function mouseHoverImage() {
     var m = createVector(mouseX, mouseY);
     var bool = false;
@@ -258,12 +271,12 @@ function mouseHoverImage() {
         if (images[i].isSame(m) && !isDragging) {
             cursor(HAND);
             bool = true;
-            highlightText(images[i].name, currentEditor, 1);
+            highlightText(images[i].name, getCurrentEditor(), 1);
             imgHoverIndex = i;
         }
     }
     if (!bool && imgHoverIndex != -1 && dragImageIndex == -1) {
-        highlightText(images[imgHoverIndex].name, currentEditor, 0);
+        highlightText(images[imgHoverIndex].name, getCurrentEditor(), 0);
     }
 }
 
@@ -271,7 +284,7 @@ function mouseDragged() {
     if (isDragging) {
         var newPos = createVector(mouseX - offset.x, mouseY - offset.y);
         images[dragImageIndex].updatePosition(newPos);
-	    updatePositionInProject(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y);
+	updatePositionInProject(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y);
     }
 }
 
