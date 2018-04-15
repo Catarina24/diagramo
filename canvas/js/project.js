@@ -12,9 +12,11 @@ buttonExport.addEventListener('click', function (event) {
         if (!editor) return;
 
         const name = $(this).find(".tab-name").first().text() + ".dgm"
-        const content = ace.edit(editors[editor - 1]).getValue();
+        const content = ace.edit(document.getElementById("editor-" + editor)).getValue();
+	console.log(name, content)
 
-	data += "&" + encodeURI(name) + "=" + encodeURI(content);
+	data += "&" + escape(name) + "=" + escape(content);
+	console.log(data);
     });
 
     event.preventDefault();

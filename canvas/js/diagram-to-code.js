@@ -72,7 +72,7 @@ function ChangeObjectPosition(editor, code, objectCode, newPositionX, newPositio
 
 let marker;
 function highlightText(element, editorEl, set) {
-    console.log(editor)
+    // console.log(editor)
     editor = ace.edit(editorEl);
     var code = editor.getValue();
 
