@@ -67,13 +67,14 @@ function highlightText(element, editor, set) {
     var str = element;
 
     var objectDeclarationRegex = new RegExp("object " + element + "[\\s\\S]*?end");
-    var objectDeclarationMatch = code.match(objectDeclarationRegex); 
-    var objectCode = objectDeclarationMatch[0]; // only first match
+    var objectDeclarationMatch = code.match(objectDeclarationRegex);
 
     // Does not match current editor
     if(objectDeclarationMatch == null){
         return;
     }
+    
+    var objectCode = objectDeclarationMatch[0]; // only first match
 
     var begin = code.match(objectDeclarationRegex).index;
     let numLines = 0;

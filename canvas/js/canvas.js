@@ -77,6 +77,7 @@ function reset() {
 }
 
 function parseElementsToDraw(object) {
+    console.log("Redrawing")
     reset();
     //funcao
     object.objects.forEach(obj => {
