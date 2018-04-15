@@ -274,7 +274,7 @@ function mouseDragged() {
         var newPos = createVector(mouseX - offset.x, mouseY - offset.y);
         images[dragImageIndex].updatePosition(newPos);
         updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor);
-        highlightText(images[i].name, currentEditor, 1);
+        //highlightText(images[i].name, currentEditor, 1);
     }
 }
 
