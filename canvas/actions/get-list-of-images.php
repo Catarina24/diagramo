@@ -3,7 +3,7 @@
 $directory = "../";
 $scanned_directory = array_diff(scandir($directory), array('..', '.'));
 
-$images = preg_grep('/.\.(jpeg|jpg|png)$/', $scanned_directory);
+$images = preg_grep('/.\.(jpeg|jpg|png|svg)$/', $scanned_directory);
 
 $simple_array = array();
 
