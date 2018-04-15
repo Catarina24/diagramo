@@ -8,95 +8,81 @@
 
 ---
 
+# Diagramo
 
-Are you tired of having to use your touchpad to create those annoying diagrams for projects specification? Want to be able to create diagrams as fast as you code? There is nothing better than that Draw.io which takes like `MAX_INT` minutes to get everything perfect?
+Are you tired of having to use your touchpad to create those annoying diagrams for projects specification? Want to be able to create diagrams as fast as you code? It always takes you `MAX_INT` minutes to get everything perfect?
 
-Then **Diagramo** is *all you'll need*. I'm not even kidding. Diagramo has an editor. Diagramo has a canvas. Diagramo has *classes*. ON A DIAGRAM. Object oriented those sons of bi\*\*es. Want to change one little thing without f'ing up everything else? ***Diagramo it!*** Want to use your own goddamn images and not those little icons from the Internet? ***DIAGRAMO IT!*** Want to use your own macros to create *light-speed diagrams*? Not yet, but you will ***DIAGRAMO IT.***
+Then **Diagramo** is *perfect* for you. Its an innovative diagram editor which combines the best of two worlds: programming and diagramming. 
 
-With **Diagramo** 'Enterprise Architect' will just be forgotten words echoing in nightmares.
+## Features
+
+**Diagramo** features a *customized syntax* which allows you create, visualize and export diagrams rapidly. Diagramo gives you:
+
+- A clean editor for you to *code* your diagrams.
+- An *interactive* canvas which displays the diagram you're creating.
+- An image upload function.
+- The possibility to export and import projects.
+
+But that is not all. Diagramo's syntax is **object-oriented**. This means that you can set multiple elements' definitions with just a couple of keystrokes. Inheritance handles the rest.
+
+The canvas lets you **drag** elements around, changing their properties in the editor accordingly, and it helps you align connected elements with a "snap" function.
+
+You can also **import** code from different files and use **your own** images.
+
+With **Diagramo** you spend less time drawing and more time modelling.
 
 What are you waiting for? Read further and start **DIAGRAMO-ING!**
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+To run Diagramo you'll need:
 
-```
-Give examples
-```
+- [python3](https://www.python.org/downloads/)
+- [bottle.py](https://bottlepy.org/docs/dev/)
+- php7.0 `sudo apt-get-install php7.0`
+- php7.0-zip `sudo apt-get install php7.0-zip`
+
+Diagramo is tested to run in Ubuntu.
 
 ### Installing
 
-A step by step series of examples that tell you have to get a development env running
-
-Say what the step will be
+To install Diagramo you only have to clone this git repository
 
 ```
-Give the example
+git clone https://github.com/makeorbreak-io/diagramo
 ```
 
-And repeat
+### Running
+
+To run Diagramo you'll need to start two diferent servers.
+
+Start the `canvas` server by changing the current directory to the `canvas` folder of the repository and then running.
 
 ```
-until finished
+php -S 127.0.0.1:8081
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+Start the `compiler` server by changing the current directory to the `compiler` folder of the repository and then running.
 
 ```
-Give an example
+python3 server.py
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
+Once you visit `localhost:8081` on a browser, you'll see Diagramo.
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+* [bottle.py](https://bottlepy.org/docs/dev/) - Used for the compiler server
+* [P5.js](https://p5js.org/) - Javascript framework for graphic visualization used for the canvas
+* [AceEditor](https://ace.c9.io/) - Used for the text editor
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+* [Catarina Correia](https://github.com/Catarina24)
+* [João Silva](https://github.com/joaosilva22 )
+* [José Aleixo](https://github.com/jazzchipc)
+* [Margarida Viterbo](https://github.com/margaridaviterbo)
