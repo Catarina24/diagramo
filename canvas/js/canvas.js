@@ -277,7 +277,6 @@ function mouseDragged() {
 function mouseReleased() {
     isDragging = false;
     if (dragImageIndex != -1)
-        //updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor);
         updatePositionInProject(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y);
     dragImageIndex = -1;
 }
