@@ -47,16 +47,21 @@
             <div id="my-editors" class="flex-1">
                 <div class="relative height-parent-height" id="editor-div">
                     <pre class="editor tab-content" id="editor-1">
-class actor
-    position: 10, 20
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Robustness_Diagram_Actor.svg/1024px-Robustness_Diagram_Actor.svg.png"
-    label: "Actor"
-    connect: []
+class database
+    image: "https://openclipart.org/image/2400px/svg_to_png/94723/db.png"
 end
 
-object a1 is actor
-    position: 50, 50
-end</pre>
+object a1 is database
+	position: 118, 155
+	label: "I am a database!"
+end
+
+object a2 is database
+    connect: [a1]
+	label: "I am another database!"
+	position: 389, 155
+end
+		    </pre>
                 </div>
             </div>
             <div>
