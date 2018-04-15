@@ -8,7 +8,7 @@ class MyImage {
         this.img = img;
         this.label = label || '';
         this.name = name;
-	this.text = text || '';
+	    this.text = text || '';
     }
 
     updatePosition(pos) {
@@ -35,7 +35,7 @@ class MyImage {
     draw() {
         noStroke();
         image(this.img, this.x, this.y, this.width, this.height);
-	text(this.text, this.x + 5, this.y + 5, this.width - 10)
+	    text(this.text, this.x + 5, this.y + 5, this.width - 10);
         text(this.label, this.x, this.y + this.height + 15, this.width);
         textAlign(CENTER);
     }
@@ -94,8 +94,10 @@ function parseElementsToDraw(object) {
                 }
 
                 if (obj.position == null) {
-                    x = objClass.position.x;
-                    y = objClass.position.y;
+		    if (objClass.position != null) {
+			x = objClass.position.x ;
+			y = objClass.position.y;
+		    }
                 }
                 else {
                     if (obj.position.x == null) {
@@ -242,6 +244,7 @@ function mousePressed() {
             isDragging = true;
             dragImageIndex = i;
             offset = createVector(mouseX - images[i].x, mouseY - images[i].y);
+            //highlightText(images[i].name, currentEditor, 1);
         }
     }
 }
@@ -252,8 +255,14 @@ function mouseHoverImage() {
     for (var i = 0; i < images.length; i++) {
         if (images[i].isSame(m) && !isDragging) {
             cursor(HAND);
+            highlightText(images[i].name, currentEditor, 1);
+        }
+        else{
+            highlightText(images[i].name, currentEditor, 0);
         }
     }
+
+    //TODO highlightText();
 }
 
 function mouseDragged() {
@@ -289,8 +298,4 @@ function windowResized() {
 
 function saveDiagram() {
     save();
-}
-
-function exportProject() {
-    console.log("Vou exportar");
 }

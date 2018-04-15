@@ -29,10 +29,33 @@ function addNewTab(currentNumberOfEditors){
     $("#add-new-tab-button").before(btn);
 }
 
+function addNewTab(currentNumberOfEditors, name){
+    var newEditorNumber = currentNumberOfEditors + 1;
+
+    var btn = document.createElement("div");
+    btn.className += "editor-tab";
+    btn.dataset.number = newEditorNumber;
+    btn.innerHTML = "<span class=\"tab-name\" contenteditable=\"true\">" + name + "</span> <span class=\"close-tab\">x</span>"
+
+    $("#add-new-tab-button").before(btn);
+}
+
 function createNewEditor(editors, editorNumber, _callback) {
     var newEditor = document.createElement("pre");
     newEditor.className += "editor tab-content";
     newEditor.id = "editor-" + editorNumber;
+
+    $("#editor-div").append(newEditor);
+    editors.push(newEditor);
+
+    _callback(newEditor);
+}
+
+function createNewEditorWithText(editors, editorNumber, text, _callback) {
+    var newEditor = document.createElement("pre");
+    newEditor.className += "editor tab-content";
+    newEditor.id = "editor-" + editorNumber;
+    newEditor.innerHTML = text;
 
     $("#editor-div").append(newEditor);
     editors.push(newEditor);

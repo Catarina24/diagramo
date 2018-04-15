@@ -66,13 +66,13 @@ class Lexer:
         if content == None:
             try:
                 file = open(filepath, "r")
-                content = file.read() + "\n"
+                content = file.read()
             except FileNotFoundError:
                 return False
         start = len(self.stream)
+        self.stream += "\n" + content
         end = start + len(content)
         self.files.append((filepath, end))
-        self.stream += content
         return True
         
     def append_to_stream(self, content):
@@ -383,7 +383,7 @@ class Parser:
                 self.ids.append(id)
                 self.classes.append(id)
             self.cur_token = self.lexer.get_token()
-            while self.cur_token.tag != Tag.END:
+            while self.cur_token.tag != Tag.END and self.cur_token.tag != Tag.EOF:
                 
                 if self.cur_token.tag == Tag.LABEL:
                     self.cur_token = self.lexer.get_token()
@@ -414,7 +414,7 @@ class Parser:
                     class_node.text = self.parse_text()
 
                 else:
-                    self.error("expected property name (one of label, position, image or connects)")
+                    self.error("expected property name (one of label, position, image or connects) or end")
                     self.cur_token = self.lexer.get_token()
             self.cur_token = self.lexer.get_token()
             return class_node
@@ -435,7 +435,7 @@ class Parser:
                     object_node = ObjectAstNode(parent, name)
                     self.references.append((parent, self.lexer.get_file(), self.lexer.line_no))
                     self.cur_token = self.lexer.get_token()
-                    while self.cur_token.tag != Tag.END:
+                    while self.cur_token.tag != Tag.END and self.cur_token.tag != Tag.EOF:
                         
                         if self.cur_token.tag == Tag.LABEL:
                             self.cur_token = self.lexer.get_token()
@@ -466,7 +466,7 @@ class Parser:
                             object_node.text = self.parse_text()
     
                         else:
-                            self.error("expected property name (one of label, position, image or connects)")
+                            self.error("expected property name (one of label, position, image or connects) or end")
                             self.cur_token = self.lexer.get_token()
                     self.cur_token = self.lexer.get_token()
                     return object_node

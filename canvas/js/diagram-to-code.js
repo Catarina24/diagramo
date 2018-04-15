@@ -59,3 +59,31 @@ function ChangeObjectPosition(editor, code, objectCode, newPositionX, newPositio
             _callback(editor, code, objectCode, newObjectCode);
         }
 }
+
+let marker;
+function highlightText(element, editor, set) {
+    var code = editor.getValue();
+
+    var str = element;
+
+    var objectDeclarationRegex = new RegExp("object " + element + "[\\s\\S]*end");
+    var objectDeclarationMatch = code.match(objectDeclarationRegex); 
+    var begin = code.match(objectDeclarationRegex).index;
+    var numLines = 0;
+    for(var i = 0; i <= begin; i++){
+        if(code[i] == '\n'){
+            numLines++;
+        }
+    }
+    var objectCode = objectDeclarationMatch[0]; // only first match
+    var Range = ace.require('ace/range').Range;
+    if(set == 1 && !marker){
+        console.log(marker);
+        marker = editor.session.addMarker(new Range(numLines, 0, objectCode.length, 1), "myMarker", "fullLine");
+    }
+    else if (set == 0) {
+        console.log(marker);
+        editor.session.removeMarker(marker);
+        marker = null;
+    }
+}
