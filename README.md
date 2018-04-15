@@ -1,4 +1,13 @@
-# Diagramo
+<p align="center">
+  <img src="https://github.com/makeorbreak-io/diagramo/blob/master/diagramo.png" width="300">
+  <img src="https://github.com/makeorbreak-io/diagramo/blob/master/logodiagramo.png" width="100">
+</p>
+
+<h3 align="center" style="margin: 0 auto">Diagrams made easy<!-- Serve Confidently --></h3>
+<p align="center" style="margin: 0 auto">Project developed during Make or Brake 2018</p>
+
+---
+
 
 Are you tired of having to use your touchpad to create those annoying diagrams for projects specification? Want to be able to create diagrams as fast as you code? There is nothing better than that Draw.io which takes like `MAX_INT` minutes to get everything perfect?
 
