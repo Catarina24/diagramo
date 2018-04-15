@@ -71,6 +71,7 @@ function reset() {
     images = [];
     isDragging = false;
     dragImageIndex = -1;
+    imgHoverIndex = -1;
     connections = [];
     mapNamesToImgs = [];
 }
@@ -244,25 +245,25 @@ function mousePressed() {
             isDragging = true;
             dragImageIndex = i;
             offset = createVector(mouseX - images[i].x, mouseY - images[i].y);
-            //highlightText(images[i].name, currentEditor, 1);
         }
     }
 }
 
 function mouseHoverImage() {
     var m = createVector(mouseX, mouseY);
+    var bool = false;
 
     for (var i = 0; i < images.length; i++) {
         if (images[i].isSame(m) && !isDragging) {
             cursor(HAND);
+            bool = true;
             highlightText(images[i].name, currentEditor, 1);
-        }
-        else{
-            highlightText(images[i].name, currentEditor, 0);
+            imgHoverIndex = i;
         }
     }
-
-    //TODO highlightText();
+    if (!bool && imgHoverIndex != -1 && dragImageIndex == -1) {
+        highlightText(images[imgHoverIndex].name, currentEditor, 0);
+    }
 }
 
 function mouseDragged() {

@@ -66,8 +66,9 @@ function highlightText(element, editor, set) {
 
     var str = element;
 
-    var objectDeclarationRegex = new RegExp("object " + element + "[\\s\\S]*end");
+    var objectDeclarationRegex = new RegExp("object " + element + "[\\s\\S]*?end");
     var objectDeclarationMatch = code.match(objectDeclarationRegex); 
+    var objectCode = objectDeclarationMatch[0]; // only first match
 
     // Does not match current editor
     if(objectDeclarationMatch == null){
@@ -75,20 +76,24 @@ function highlightText(element, editor, set) {
     }
 
     var begin = code.match(objectDeclarationRegex).index;
-    var numLines = 0;
+    let numLines = 0;
     for(var i = 0; i <= begin; i++){
         if(code[i] == '\n'){
             numLines++;
         }
     }
-    var objectCode = objectDeclarationMatch[0]; // only first match
+    let numLinesHigh = 0;
+    for(var i = begin + 1; i <= begin + 1 + objectCode.length; i++){
+        if(code[i] == '\n'){
+            numLinesHigh++;
+        }
+    }
+    
     var Range = ace.require('ace/range').Range;
     if(set == 1 && !marker){
-        // console.log(marker);
-        marker = editor.session.addMarker(new Range(numLines, 0, objectCode.length, 1), "myMarker", "fullLine");
+        marker = editor.session.addMarker(new Range(numLines, 0, numLines + numLinesHigh - 1, 0), "myMarker", "fullLine");
     }
     else if (set == 0) {
-        // console.log(marker);
         editor.session.removeMarker(marker);
         marker = null;
     }

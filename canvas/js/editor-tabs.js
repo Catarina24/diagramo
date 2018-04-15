@@ -35,7 +35,7 @@ function addNewTabName(currentNumberOfEditors, name){
     var btn = document.createElement("div");
     btn.className += "editor-tab";
     btn.dataset.number = newEditorNumber;
-    btn.innerHTML = "<span class=\"tab-name\" contenteditable=\"true\">" + name + "</span> <span class=\"close-tab\">x</span>"
+    btn.innerHTML = "<span class=\"tab-name\" contenteditable=\"true\">" + name.substring(0, name.length-4) + "</span>.dgm<span class=\"close-tab\">x</span>"
 
     $("#add-new-tab-button").before(btn);
 }

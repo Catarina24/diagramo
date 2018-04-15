@@ -285,7 +285,9 @@ end</pre>
 		     valid = true;
 		 }
 
-		 data.content = ace.edit(editors[editor-1]).getValue();
+		 const e = document.getElementById("editor-" + editor);
+		 data.content = ace.edit(e).getValue();
+		 console.log(data.content)
 		 files.push(data);
 	     });
 
