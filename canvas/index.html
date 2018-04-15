@@ -375,6 +375,8 @@ end</pre>
                      }
 		     
 		     createAlert("Project imported successfully", "success");
+		     // Trigger compile
+		     $('#editor-div').keyup();
                  }
              },
              error: function (error) {
@@ -382,7 +384,11 @@ end</pre>
 		 createAlert("Error importing project", "error");
              }
          })
+
      });
+
+     // Trigger compile
+     $('#editor-div').keyup();
     </script>
 </body>
 
