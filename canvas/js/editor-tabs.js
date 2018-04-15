@@ -29,7 +29,7 @@ function addNewTab(currentNumberOfEditors){
     $("#add-new-tab-button").before(btn);
 }
 
-function addNewTab(currentNumberOfEditors, name){
+function addNewTabName(currentNumberOfEditors, name){
     var newEditorNumber = currentNumberOfEditors + 1;
 
     var btn = document.createElement("div");
