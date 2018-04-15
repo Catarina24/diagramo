@@ -86,8 +86,9 @@ end</pre>
                 <div id="resources" class="tabcontent">
                     <div class="margin-vertical">
                         <form id="image-upload-form">
-			    <label for="upload-image" style="cursor: pointer;"><span style="text-decoration: underline">Upload image...</span></label>
-			    <input id="upload-image" name="pic" type="file" onchange="$(this).closest('form').submit();" style="opacity: 0; position: absolute; z-index: -1;" /> 
+			    <!-- <label for="upload-image" style="cursor: pointer;"><span style="text-decoration: underline">Upload image...</span></label> -->
+			    <button type="button" onclick="$('#upload-image').trigger('click');" style="position: absolute; right: 22px; bottom: 10px"><i class="fa fa-upload" aria-hidden="true" style="margin-right: 5px"></i>Upload Image</button>
+			    <input id="upload-image" name="pic" onchange="$(this).closest('form').submit();" type="file" style="opacity: 0; position: absolute; z-index: -1;" /> 
                         </form>
                     </div>
                     <div id="resources-list-div">
@@ -97,8 +98,8 @@ end</pre>
         </div>
         <div id="diagrama" class="flex-1" >
 
-            <p style="position: absolute; right: 70px; margin-top: 10px; line-height: 36px; font-family: 'Gugi', cursive; color: dodgerblue; font-size: 20px">Diagramo</p>
-            <img src="favicon.ico" style="height: 30px; position: absolute; right: 20px; line-height: 36px; margin-top: 13px;">
+            <p style="position: absolute; right: 70px; margin-top: 10px; line-height: 36px; font-family: 'Gugi', cursive; color: dodgerblue; font-size: 20px; opacity: 0.2">Diagramo</p>
+            <img src="favicon.ico" style="height: 30px; position: absolute; right: 20px; line-height: 36px; margin-top: 13px; opacity: 0.2">
 
             <button id="download" onclick="saveDiagram()">
                 <i class="fa fa-download" aria-hidden="true"></i>
@@ -257,11 +258,6 @@ end</pre>
 	 resizeCanvas(diagram.width(), diagram.height())
 	 updateCanvas(diagram.width(), diagram.height())
      })
-
-     /*
-     $("#image-upload-button").onchange(function () {
-	 $("#image-upload-form").submit();
-     });*/
 
      var timeout;
      $('#editor-div').keyup(function() {

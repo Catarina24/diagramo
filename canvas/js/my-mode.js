@@ -5,7 +5,7 @@ ace.define('ace/mode/my-mode',["require","exports","module","ace/lib/oop","ace/m
 
     var MyHighlightRules = function() {
         var keywordMapper = this.createKeywordMapper({
-            "keyword.other": "class|object|end|is",
+            "keyword.other": "class|object|end|is|import",
 	}, "identifier");
         this.$rules = {
             "start": [
