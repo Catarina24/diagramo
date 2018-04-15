@@ -70,11 +70,13 @@ end</pre>
                     <div>
                         <!-- dar fix -->
                         <form id="folder-upload-form">
-                            <input id="folder" type="file" name="folder" accept=".zip">
-                            <input type="submit">
+			    <!-- 
+				 <input id="folder" type="file" name="folder" accept=".zip">
+				 <input type="submit">
+			    -->
+			    <button type="button" onclick="$('#import-project').trigger('click');"><i class="fa fa-upload" aria-hidden="true" style="margin-right: 5px"></i>Import Project</button>
+			    <input id="import-project" name="folder" onchange="$(this).closest('form').submit();" type="file" style="opacity: 0; position: absolute; z-index: -1;" accept=".zip" /> 
                         </form>
-                        <button id="import" style="margin-right: 10px;">
-                            <i style="margin-right: 5px;" class="fa fa-upload" aria-hidden="true"></i>Import project</button>
                         <button id="export" style="margin-left: 10px;">
                             <i style="margin-right: 5px;" class="fa fa-download" aria-hidden="true"></i>Export project</button>
                     </div>
@@ -328,7 +330,9 @@ end</pre>
 
 
     $('#folder-upload-form').on("submit", function (event) {
-        event.preventDefault();
+         event.preventDefault();
+
+	 console.log("Hello")
 
         $.ajax({
             url: 'actions/upload-folder.php',
@@ -339,6 +343,8 @@ end</pre>
             success: function (dataJson) {
                 msg = JSON.parse(dataJson);
 
+		console.log(msg)
+		
                 if (msg.status == "OK") {
                     var editors = $('.editor');
 
