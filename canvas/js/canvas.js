@@ -3,8 +3,8 @@ class MyImage {
     constructor(pos, width, height, img, label, name, text) {
         this.x = pos.x || 0;
         this.y = pos.y || 0;
-        this.width = width | 100;
-        this.height = height | 100;
+        this.width = width || 100;
+        this.height = height || 100;
         this.img = img;
         this.label = label || '';
         this.name = name;
@@ -77,7 +77,6 @@ function reset() {
 }
 
 function parseElementsToDraw(object) {
-    console.log("Redrawing")
     reset();
     //funcao
     object.objects.forEach(obj => {
@@ -146,7 +145,6 @@ function parseElementsToDraw(object) {
                         connections.push([obj.name, obj.connects[i]]);
                     }
                 }
-
                 createMyImage(x, y, width, height, img, label, obj.name, text);
             }
         });
