@@ -66,7 +66,6 @@ function highlightText(element, editor, set) {
         marker = editor.session.addMarker(new Range(numLines, 0, objectCode.length, 1), "myMarker", "fullLine");
     }
     else if (set == 0) {
-        console.log(marker);
         editor.session.removeMarker(marker);
         marker = null;
     }

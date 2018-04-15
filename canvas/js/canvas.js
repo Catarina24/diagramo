@@ -245,7 +245,6 @@ function mousePressed() {
             isDragging = true;
             dragImageIndex = i;
             offset = createVector(mouseX - images[i].x, mouseY - images[i].y);
-            //highlightText(images[i].name, currentEditor, 1);
         }
     }
 }
@@ -262,11 +261,9 @@ function mouseHoverImage() {
             imgHoverIndex = i;
         }
     }
-    if (!bool && imgHoverIndex != -1) {
+    if (!bool && imgHoverIndex != -1 && dragImageIndex == -1) {
         highlightText(images[imgHoverIndex].name, currentEditor, 0);
     }
-
-    //TODO highlightText();
 }
 
 function mouseDragged() {
@@ -274,7 +271,6 @@ function mouseDragged() {
         var newPos = createVector(mouseX - offset.x, mouseY - offset.y);
         images[dragImageIndex].updatePosition(newPos);
         updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor);
-        //highlightText(images[i].name, currentEditor, 1);
     }
 }
 
@@ -282,7 +278,6 @@ function mouseReleased() {
     isDragging = false;
     if (dragImageIndex != -1)
         updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor);
-        //highlightText(images[dragImageIndex].name, currentEditor, 0);
     dragImageIndex = -1;
 }
 
