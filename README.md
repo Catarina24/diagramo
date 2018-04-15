@@ -2,7 +2,7 @@
 
 Are you tired of having to use your touchpad to create those annoying diagrams for projects specification? Want to be able to create diagrams as fast as you code? There is nothing better than that Draw.io which takes like `MAX_INT` minutes to get everything perfect?
 
-Then **Diagramo** is *all you'll need*. I'm not even kidding. Diagramo has an editor. Diagramo has a canvas. Diagramo has *classes*. ON A DIAGRAM. Object oriented those sons of bi\*\*es. Want to change one little thing without f'ing up everything else? ***Diagramo it!*** Want to use your own goddamn images and not those little icons from the Internet? ***DIAGRAMO IT!*** Want to use your own macros to create *light-speed diagrams*? ***NOT YET, BUT YOU WILL DIAGRAMO IT.***
+Then **Diagramo** is *all you'll need*. I'm not even kidding. Diagramo has an editor. Diagramo has a canvas. Diagramo has *classes*. ON A DIAGRAM. Object oriented those sons of bi\*\*es. Want to change one little thing without f'ing up everything else? ***Diagramo it!*** Want to use your own goddamn images and not those little icons from the Internet? ***DIAGRAMO IT!*** Want to use your own macros to create *light-speed diagrams*? Not yet, but you will ***DIAGRAMO IT.***
 
 With **Diagramo** 'Enterprise Architect' will just be forgotten words echoing in nightmares.
 
