@@ -269,15 +269,14 @@ function mouseDragged() {
     if (isDragging) {
         var newPos = createVector(mouseX - offset.x, mouseY - offset.y);
         images[dragImageIndex].updatePosition(newPos);
-        updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor);
+	    updatePositionInProject(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y);
     }
 }
 
 function mouseReleased() {
     isDragging = false;
     if (dragImageIndex != -1)
-        updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor);
-        //highlightText(images[dragImageIndex].name, currentEditor, 0);
+        updatePositionInProject(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y);
     dragImageIndex = -1;
 }
 
@@ -292,7 +291,7 @@ function windowResized() {
         let x = images[i].x * (windowWidth/2) / canvasWidth;
         let y = images[i].y * windowHeight / canvasHeight;
         images[i].updatePosition(createVector(x, y));
-        updatePositionInEditor(images[i].name, images[i].x, images[i].y, currentEditor);
+        updatePositionInProject(images[i].name, images[i].x, images[i].y);
     }
     updateCanvas(windowWidth/2, windowHeight);
 }

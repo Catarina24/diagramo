@@ -1,26 +1,42 @@
-function updatePositionInEditor(element, x, y, editor){
+function updatePositionInProject(element, x, y){
 
-    var code = editor.getValue();
+    // ASSUMES variable 'editors' as being the set of all editors as well as 'ace' from index.html
+    var foundObject = false;
 
-    var str = element;
+    var itemsProcessed = 0;
 
-    var objectDeclarationRegex = new RegExp("object " + element + "[\\s\\S]*end");
-    var objectDeclarationMatch = code.match(objectDeclarationRegex); 
+    /** FALAR COM O ZÉ ANTES DE MEXER AQUI. ISTO ESTÁ UMA MISTELA BRUTAL! */
+    for(var i = 0; i < numberOfEditors; i++){
+        itemsProcessed++;
 
-    if(objectDeclarationMatch == null){
-        console.error("There is no object '" + element + "'.");
-        return;
+        var editor = ace.edit(editors[i]);
+        var code = editor.getValue();
+        
+        var str = element;
+
+        var objectDeclarationRegex = new RegExp("object " + element + "[\\s\\S]*end");
+        var objectDeclarationMatch = code.match(objectDeclarationRegex); 
+
+        if(objectDeclarationMatch == null){
+            continue; // object not in current editor
+        }
+
+        var objectCode = objectDeclarationMatch[0]; // only first match
+
+        /** This next function is complete cancer. I'm so sorry. */
+        ChangeObjectPosition(editor, code, objectCode, x, y, function (editor, code, objectCode, newObjectCode) {
+            var newCode = code.replace(objectCode, newObjectCode);
+
+            // get previous cursor position
+            var cursorPosition = editor.selection.getCursor();
+            editor.setValue(newCode, -1); // -1 moves the cursor to begining, 1 moves cursor to end
+            //move to previous position
+            editor.selection.moveCursorToPosition(cursorPosition);
+        });
     }
-
-    var objectCode = objectDeclarationMatch[0]; // only first match
-
-    ChangeObjectPosition(objectCode, x, y, function(newObjectCode) {
-        var newCode = code.replace(objectCode, newObjectCode);
-        editor.setValue(newCode, -1); // -1 moves the cursor to begining, 1 moves cursor to end
-    });
 }
 
-function ChangeObjectPosition(objectCode, newPositionX, newPositionY, _callback){
+function ChangeObjectPosition(editor, code, objectCode, newPositionX, newPositionY, _callback){
     
     var newPositionCode = "position: " + newPositionX + ", " + newPositionY;
 
@@ -40,7 +56,7 @@ function ChangeObjectPosition(objectCode, newPositionX, newPositionY, _callback)
     // Make sure the callback is a function​
     if (typeof _callback === "function") {
         // Call it, since we have confirmed it is callable​
-            _callback(newObjectCode);
+            _callback(editor, code, objectCode, newObjectCode);
         }
 }
 
@@ -52,6 +68,12 @@ function highlightText(element, editor, set) {
 
     var objectDeclarationRegex = new RegExp("object " + element + "[\\s\\S]*end");
     var objectDeclarationMatch = code.match(objectDeclarationRegex); 
+
+    // Does not match current editor
+    if(objectDeclarationMatch == null){
+        return;
+    }
+
     var begin = code.match(objectDeclarationRegex).index;
     var numLines = 0;
     for(var i = 0; i <= begin; i++){

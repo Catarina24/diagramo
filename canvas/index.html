@@ -247,7 +247,6 @@ end</pre>
                  currentEditorNumber = clickedEditorNumber;
                  currentEditorFilename = $(".editor-tab.active").text();
                  currentEditor = ace.edit(editors[currentEditorNumber-1]);
-                 console.log(currentEditor.getValue());
              });
          }
      })
@@ -356,7 +355,7 @@ end</pre>
 
                         console.log(filename, content);
 
-                        addNewTab(editors.length, filename);
+                        addNewTabName(editors.length, filename);
                         
                         createNewEditorWithText(editors, editors.length + 1, content, function(newEditor){
                             var editor = ace.edit(newEditor);
