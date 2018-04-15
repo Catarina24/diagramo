@@ -66,5 +66,5 @@ function createNewEditorWithText(editors, editorNumber, text, _callback) {
 function deleteEditor(editors, editorNumber) {
     console.log(editors)
     console.log(editorNumber)
-    editors[editorNumber-1].remove()
+    document.getElementById("editor-" + editorNumber).remove();
 }

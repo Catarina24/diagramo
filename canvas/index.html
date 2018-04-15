@@ -338,7 +338,6 @@ end</pre>
                 msg = JSON.parse(dataJson);
 
                 if (msg.status == "OK") {
-                    console.log(msg.code);
                     var editors = $('.editor');
 
                     $("#my-editors-tabs").children(".editor-tab").each(function() {
@@ -353,8 +352,7 @@ end</pre>
                         var filename = i;
                         var content = msg.code[i];
 
-                        console.log(filename, content);
-
+			console.log(editor.length);
                         addNewTabName(editors.length, filename);
                         
                         createNewEditorWithText(editors, editors.length + 1, content, function(newEditor){

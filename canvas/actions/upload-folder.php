@@ -39,6 +39,9 @@ if ($uploadOk == 0) {
 $status = "";
 $done = "";
 
+//Extract code from src folder
+$code = array();
+
 if($uploadOk){    
     $zip = new ZipArchive;
     $res = $zip->open($target_file);
@@ -52,20 +55,24 @@ if($uploadOk){
             mkdir($pathAux, 0777, true);
             $zip->extractTo($pathAux);
             $zip->close();
+	    unlink($target_file);
 
-            //Extract code from src folder
-            $code = array();
-
-            $dir = new DirectoryIterator($pathAux . "/src");
+            $dir = new DirectoryIterator($pathAux);
             foreach ($dir as $file) {
                 if (!$file->isDot()) {
-                    $filePath = $pathAux . "/src/" . $file->getFileName();
-                    $fileAux = fopen($filePath, "r");
-                    $content = fread($fileAux, filesize($filePath));
-                    fclose($fileAux);
-                    $code[$file->getFileName()] = $content;
+                    $filePath = $pathAux . "/" . $file->getFileName();
+		    $ext = pathinfo($filePath, PATHINFO_EXTENSION);
+		    if ($ext == "dgm") {
+                        $fileAux = fopen($filePath, "r");
+                        $content = fread($fileAux, filesize($filePath));
+                        fclose($fileAux);
+                        $code[$file->getFileName()] = $content;
+		    }
+		    unlink($filePath);
                 }
             }
+
+            rmdir($pathAux);
         }
     }
     else {
