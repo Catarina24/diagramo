@@ -215,6 +215,8 @@ end</pre>
                      resourcesElement.html(""); // clean element
                      resourcesElement.append(listOfResources);
                  })
+
+		 createAlert("Resource imported successfully", "success");
              }
          });
      });
@@ -295,6 +297,7 @@ end</pre>
 
 	     if (!valid) {
 		 appendErrorToConsole("Missing entry point 'main.dgm'");
+		 createAlert("Compilation error", "error");		 
 		 return;
 	     }
 
@@ -318,65 +321,68 @@ end</pre>
 		     } else {
 			 parseElementsToDraw(res);
 			 appendToConsole("Compilation successful");
+			 createAlert("Compilation successful", "success");		 
 			 console.log(res);
 		     }
                  },
                  error: function(err){
                      appendErrorToConsole("Compilation failed: no connection to server");
+		     createAlert("Compilation error", "error");		 
                  },
 	     });
          }, 1000)
      });
 
 
-    $('#folder-upload-form').on("submit", function (event) {
+     $('#folder-upload-form').on("submit", function (event) {
          event.preventDefault();
 
 	 console.log("Hello")
 
-        $.ajax({
-            url: 'actions/upload-folder.php',
-            type: 'POST',
-            data: new FormData(this),
-            contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
-            processData: false, // NEEDED, DON'T OMIT THIS
-            success: function (dataJson) {
-                msg = JSON.parse(dataJson);
+         $.ajax({
+             url: 'actions/upload-folder.php',
+             type: 'POST',
+             data: new FormData(this),
+             contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
+             processData: false, // NEEDED, DON'T OMIT THIS
+             success: function (dataJson) {
+                 msg = JSON.parse(dataJson);
+		 
+                 if (msg.status == "OK") {
+                     var editors = $('.editor');
 
-		console.log(msg)
-		
-                if (msg.status == "OK") {
-                    var editors = $('.editor');
+                     $("#my-editors-tabs").children(".editor-tab").each(function() {
+                         let editor = this.dataset.number;
+                         if (!editor) return;
 
-                    $("#my-editors-tabs").children(".editor-tab").each(function() {
-                        let editor = this.dataset.number;
-                        if (!editor) return;
+                         this.remove();
+                         deleteEditor(editors, editor);
+                     });
 
-                        this.remove();
-                        deleteEditor(editors, editor);
-                    });
+                     for(var i in msg.code){
+                         var filename = i;
+                         var content = msg.code[i];
 
-                    for(var i in msg.code){
-                        var filename = i;
-                        var content = msg.code[i];
-
-			console.log(editor.length);
-                        addNewTabName(editors.length, filename);
-                        
-                        createNewEditorWithText(editors, editors.length + 1, content, function(newEditor){
-                            var editor = ace.edit(newEditor);
-                            editor.setTheme("ace/theme/dawn");
-                            editor.session.setMode("ace/mode/my-mode");
-                            newEditor.style.fontSize = '16px';
-                        });
-                    }
-                }
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        })
-    });
+			 console.log(editor.length);
+                         addNewTabName(editors.length, filename);
+                         
+                         createNewEditorWithText(editors, editors.length + 1, content, function(newEditor){
+                             var editor = ace.edit(newEditor);
+                             editor.setTheme("ace/theme/dawn");
+                             editor.session.setMode("ace/mode/my-mode");
+                             newEditor.style.fontSize = '16px';
+                         });
+                     }
+		     
+		     createAlert("Project imported successfully", "success");
+                 }
+             },
+             error: function (error) {
+                 console.log(error);
+		 createAlert("Error importing project", "error");
+             }
+         })
+     });
     </script>
 </body>
 

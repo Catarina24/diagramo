@@ -68,3 +68,15 @@ function deleteEditor(editors, editorNumber) {
     console.log(editorNumber)
     document.getElementById("editor-" + editorNumber).remove();
 }
+
+
+function createAlert(message, type) {
+    let alert = document.createElement("div");
+    alert.innerHTML = message;
+    alert.className += "alert " + type;
+    console.log(alert)
+    $("#my-editors-div").append(alert);
+    setTimeout(function() {
+	alert.remove()
+    }, 3000);
+}

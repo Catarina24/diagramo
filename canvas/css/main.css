@@ -248,3 +248,25 @@ canvas {
 #resources-list-div ul li {
     padding-top: 3px;
 }
+
+/* ALERTS */
+.alert {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-family: sans;
+    padding: 10px;
+    background-color: pink;
+    font-size: 12px;
+    max-width: 300px;
+    opacity: 0.9;
+    z-index: 1000;
+}
+
+.success {
+    background-color: #84d589;
+}
+
+.error {
+    background-color: #f37373;
+}
