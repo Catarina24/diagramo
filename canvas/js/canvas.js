@@ -35,7 +35,8 @@ class MyImage {
     draw() {
         noStroke();
         image(this.img, this.x, this.y, this.width, this.height);
-	    text(this.text, this.x + 5, this.y + 5, this.width - 10);
+        text(this.text, this.x, this.y, this.width, this.height + 15);
+        textAlign(CENTER, CENTER);
         text(this.label, this.x, this.y + this.height + 15, this.width);
         textAlign(CENTER);
     }
@@ -142,7 +143,16 @@ function parseElementsToDraw(object) {
 
                 if (obj.connects != null) {
                     for (let i = 0; i < obj.connects.length; i++) {
-                        connections.push([obj.name, obj.connects[i]]);
+                        if (obj.connects[i] != obj.name) {
+                            connections.push([obj.name, obj.connects[i]]);
+                        }
+                    }
+                }
+                else if (objClass.connects != null) {
+                    for (let i = 0; i < objClass.connects.length; i++) {
+                        if (objClass.connects[i] != obj.name){
+                            connections.push([obj.name, objClass.connects[i]]);
+                        }
                     }
                 }
                 createMyImage(x, y, width, height, img, label, obj.name, text);
