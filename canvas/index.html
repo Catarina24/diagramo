@@ -86,8 +86,9 @@ end</pre>
                 <div id="resources" class="tabcontent">
                     <div class="margin-vertical">
                         <form id="image-upload-form">
-			    <label for="upload-image" style="cursor: pointer;"><span style="text-decoration: underline">Upload image...</span></label>
-			    <input id="upload-image" name="pic" type="file" onchange="$(this).closest('form').submit();" style="opacity: 0; position: absolute; z-index: -1;" /> 
+			    <!-- <label for="upload-image" style="cursor: pointer;"><span style="text-decoration: underline">Upload image...</span></label> -->
+			    <button type="button" onclick="$('#upload-image').trigger('click');" style="position: absolute; right: 22px; bottom: 10px"><i class="fa fa-upload" aria-hidden="true" style="margin-right: 5px"></i>Upload Image</button>
+			    <input id="upload-image" name="pic" onchange="$(this).closest('form').submit();" type="file" style="opacity: 0; position: absolute; z-index: -1;" /> 
                         </form>
                     </div>
                     <div id="resources-list-div">
@@ -246,7 +247,6 @@ end</pre>
                  currentEditorNumber = clickedEditorNumber;
                  currentEditorFilename = $(".editor-tab.active").text();
                  currentEditor = ace.edit(editors[currentEditorNumber-1]);
-                 console.log(currentEditor.getValue());
              });
          }
      })
@@ -257,11 +257,6 @@ end</pre>
 	 resizeCanvas(diagram.width(), diagram.height())
 	 updateCanvas(diagram.width(), diagram.height())
      })
-
-     /*
-     $("#image-upload-button").onchange(function () {
-	 $("#image-upload-form").submit();
-     });*/
 
      var timeout;
      $('#editor-div').keyup(function() {
@@ -327,7 +322,55 @@ end</pre>
                  },
 	     });
          }, 1000)
-     })
+     });
+
+
+    $('#folder-upload-form').on("submit", function (event) {
+        event.preventDefault();
+
+        $.ajax({
+            url: 'actions/upload-folder.php',
+            type: 'POST',
+            data: new FormData(this),
+            contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
+            processData: false, // NEEDED, DON'T OMIT THIS
+            success: function (dataJson) {
+                msg = JSON.parse(dataJson);
+
+                if (msg.status == "OK") {
+                    console.log(msg.code);
+                    var editors = $('.editor');
+
+                    $("#my-editors-tabs").children(".editor-tab").each(function() {
+                        let editor = this.dataset.number;
+                        if (!editor) return;
+
+                        this.remove();
+                        deleteEditor(editors, editor);
+                    });
+
+                    for(var i in msg.code){
+                        var filename = i;
+                        var content = msg.code[i];
+
+                        console.log(filename, content);
+
+                        addNewTabName(editors.length, filename);
+                        
+                        createNewEditorWithText(editors, editors.length + 1, content, function(newEditor){
+                            var editor = ace.edit(newEditor);
+                            editor.setTheme("ace/theme/dawn");
+                            editor.session.setMode("ace/mode/my-mode");
+                            newEditor.style.fontSize = '16px';
+                        });
+                    }
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    });
     </script>
 </body>
 
