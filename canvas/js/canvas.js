@@ -197,23 +197,23 @@ function drawConnections() {
             }
         }
         if (y >= x && y >= -x) {
-            stroke(111, 107, 142); 
-            strokeWeight(3);
+	    stroke(100, 100, 100);
+            strokeWeight(1);
             line(dest.x + dest.width / 2, dest.y, src.x + src.width / 2, src.y + src.height + 15);
         }
         else if (y <= -x && y >= x) {
-            stroke(111, 107, 142);
-            strokeWeight(3); 
+	    stroke(100, 100, 100);
+            strokeWeight(1); 
             line(dest.x + dest.width, dest.y + dest.height / 2, src.x, src.y + src.height / 2);
         }
         else if (y <= x && y <= -x) {
-            stroke(111, 107, 142);
-            strokeWeight(3);
+	    stroke(100, 100, 100);
+            strokeWeight(1);
             line(dest.x + dest.width / 2, dest.y + dest.height + 15, src.x + src.width / 2, src.y);
         }
         else if (y >= -x && y <= x) {
-            stroke(111, 107, 142);
-            strokeWeight(3);
+	    stroke(100, 100, 100);
+            strokeWeight(1);
             line(dest.x, dest.y + dest.height / 2, src.x + src.width, src.y + src.height / 2);
         }
     }
