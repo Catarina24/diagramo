@@ -5,11 +5,21 @@ function updatePositionInProject(element, x, y){
 
     var itemsProcessed = 0;
 
+    var trueEditors = []
     /** FALAR COM O ZÉ ANTES DE MEXER AQUI. ISTO ESTÁ UMA MISTELA BRUTAL! */
-    for(var i = 0; i < numberOfEditors; i++){
+    $("#my-editors-tabs").children(".editor-tab").each(function() {
+        let editor = this.dataset.number;
+        if (!editor) return;
+
+	if ($(this).hasClass("active")) {
+	    trueEditors.push(document.getElementById("editor-" + editor));
+	}
+    });
+    
+    for(var i = 0; i < trueEditors.length; i++){
         itemsProcessed++;
 
-        var editor = ace.edit(editors[i]);
+        var editor = ace.edit(trueEditors[i]);
         var code = editor.getValue();
         
         var str = element;
@@ -62,7 +72,7 @@ function ChangeObjectPosition(editor, code, objectCode, newPositionX, newPositio
 
 let marker;
 function highlightText(element, editorEl, set) {
-    console.log(editor)
+    // console.log(editor)
     editor = ace.edit(editorEl);
     var code = editor.getValue();
 

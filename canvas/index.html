@@ -47,10 +47,13 @@
             <div id="my-editors" class="flex-1">
                 <div class="relative height-parent-height" id="editor-div">
                     <pre class="editor tab-content" id="editor-1">
+# classes are for reusing data
+# but are not drawn in the canvas
 class database
     image: "https://openclipart.org/image/2400px/svg_to_png/94723/db.png"
 end
 
+# objects extend a class and are rendered
 object a1 is database
 	position: 118, 155
 	label: "I am a database!"
@@ -234,8 +237,16 @@ end
      $("#my-editors-tabs").on("click", ".editor-tab", function(event) {
          if(event.target.id == "add-new-tab-button"){
              // pressed + tab
-             addNewTab(numberOfEditors);
-             createNewEditor(editors, numberOfEditors + 1, function(newEditor){
+
+	     let cnt = 0;
+	     $("#my-editors-tabs").children(".editor-tab").each(function() {
+                 let editor = this.dataset.number;
+                 if (!editor) return;
+		 cnt += 1;
+	     });
+	     
+             addNewTab(cnt + 1);
+             createNewEditor(editors, cnt + 2, function(newEditor){
                  var editor = ace.edit(newEditor);
                  editor.setTheme("ace/theme/dawn");
                  editor.session.setMode("ace/mode/my-mode");
@@ -370,9 +381,17 @@ end
                          var content = msg.code[i];
 
 			 console.log(editor.length);
-                         addNewTabName(editors.length, filename);
+
+			 let cnt = 0;
+			 $("#my-editors-tabs").children(".editor-tab").each(function() {
+                             let editor = this.dataset.number;
+                             if (!editor) return;
+			     cnt += 1;
+			 });
+			 
+                         addNewTabName(cnt+1, filename);
                          
-                         createNewEditorWithText(editors, editors.length + 1, content, function(newEditor){
+                         createNewEditorWithText(editors, cnt + 2, content, function(newEditor){
                              var editor = ace.edit(newEditor);
                              editor.setTheme("ace/theme/dawn");
                              editor.session.setMode("ace/mode/my-mode");
