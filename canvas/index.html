@@ -352,6 +352,7 @@ end
              processData: false, // NEEDED, DON'T OMIT THIS
              success: function (dataJson) {
                  msg = JSON.parse(dataJson);
+		 console.log(msg);
 		 
                  if (msg.status == "OK") {
                      var editors = $('.editor');

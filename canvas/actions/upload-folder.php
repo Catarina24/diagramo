@@ -38,6 +38,7 @@ if ($uploadOk == 0) {
 
 $status = "";
 $done = "";
+$other = "";
 
 //Extract code from src folder
 $code = array();
@@ -67,6 +68,12 @@ if($uploadOk){
                         $content = fread($fileAux, filesize($filePath));
                         fclose($fileAux);
                         $code[$file->getFileName()] = $content;
+		    } else {
+			if (rename($filePath, "../" . $file->getFileName())) {
+			    $other = "not fuck";
+			} else {
+			    $other = "fuck";
+			}
 		    }
 		    unlink($filePath);
                 }
@@ -83,6 +90,6 @@ else{
     $status = "ERROR";
 }
 
-echo json_encode(array("status" => $status, "message" => $message, "code" => $code));
+echo json_encode(array("status" => $status, "message" => $message, "code" => $code, "other" => $other));
 
 ?>
