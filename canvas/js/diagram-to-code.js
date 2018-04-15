@@ -50,7 +50,7 @@ function highlightText(element, editor, set) {
 
     var str = element;
 
-    var objectDeclarationRegex = new RegExp("object " + element + "[\\s\\S]*end");
+    var objectDeclarationRegex = new RegExp("object " + element + "[\\s\\S]*?end");
     var objectDeclarationMatch = code.match(objectDeclarationRegex); 
     var begin = code.match(objectDeclarationRegex).index;
     var numLines = 0;
@@ -62,7 +62,7 @@ function highlightText(element, editor, set) {
     var objectCode = objectDeclarationMatch[0]; // only first match
     var Range = ace.require('ace/range').Range;
     if(set == 1 && !marker){
-        console.log(marker);
+        console.log(objectCode);
         marker = editor.session.addMarker(new Range(numLines, 0, objectCode.length, 1), "myMarker", "fullLine");
     }
     else if (set == 0) {

@@ -71,6 +71,7 @@ function reset() {
     images = [];
     isDragging = false;
     dragImageIndex = -1;
+    imgHoverIndex = -1;
     connections = [];
     mapNamesToImgs = [];
 }
@@ -251,15 +252,18 @@ function mousePressed() {
 
 function mouseHoverImage() {
     var m = createVector(mouseX, mouseY);
+    var bool = false;
 
     for (var i = 0; i < images.length; i++) {
         if (images[i].isSame(m) && !isDragging) {
             cursor(HAND);
+            bool = true;
             highlightText(images[i].name, currentEditor, 1);
+            imgHoverIndex = i;
         }
-        else{
-            highlightText(images[i].name, currentEditor, 0);
-        }
+    }
+    if (!bool && imgHoverIndex != -1) {
+        highlightText(images[imgHoverIndex].name, currentEditor, 0);
     }
 
     //TODO highlightText();
@@ -270,6 +274,7 @@ function mouseDragged() {
         var newPos = createVector(mouseX - offset.x, mouseY - offset.y);
         images[dragImageIndex].updatePosition(newPos);
         updatePositionInEditor(images[dragImageIndex].name, images[dragImageIndex].x, images[dragImageIndex].y, currentEditor);
+        highlightText(images[i].name, currentEditor, 1);
     }
 }
 
