@@ -74,6 +74,12 @@ python3 server.py
 
 Once you visit `localhost:8081` on a browser, you'll see Diagramo.
 
+## Screenshots
+
+![Default project screenshot](./project-examples/screenshots/default.png)
+![Imported project screenshot](./project-examples/screenshots/architecture-includes.png)
+
+
 ## Built With
 
 * [bottle.py](https://bottlepy.org/docs/dev/) - Used for the compiler server
